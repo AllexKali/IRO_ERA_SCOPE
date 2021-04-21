@@ -20,14 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// const Subjects = [
-//   {id: 0, title: 'Добавить'},
-//   {id: 1, title: 'Курс 1'},
-//   {id: 2, title: 'Курс 2'},
-//   {id: 3, title: 'Курс 3'}
-// ]
-
-
+//попытка залить на гит
 
 const AccountRole = ({ role }) => {
   const {status} = useContext(ThemeContext)
