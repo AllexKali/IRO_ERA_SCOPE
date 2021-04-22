@@ -9,4 +9,4 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 dbService.getSelect()
 
-app.listen(process.env.PORT, () => console.log(`Server has been started on port ${process.env.PORT}`))
+app.listen(process.env.PORT, () => console.log(`Server has been ------- started on port ${process.env.PORT}`))

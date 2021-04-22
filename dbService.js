@@ -19,7 +19,7 @@ conn.connect(err => {
         console.log(err);
         return err;
     } else {
-        console.log(' DB is OK');
+        console.log('Database connection ------- successful');
         console.log('db: ', conn.state);
     }
 })
@@ -32,8 +32,8 @@ class DbService {
     let query = "SELECT * FROM `role`;";
 
     conn.query(query, (err, result, field) => {
-        console.log(err);
-        console.log(result);
+        // console.log(err);
+        // console.log(result);
         // console.log(field);
     })
 }
