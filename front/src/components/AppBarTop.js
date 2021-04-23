@@ -70,8 +70,8 @@ function AppBarTop(props) {
                                 autoFocus
                                 margin="dense"
                                 id="name"
-                                label="Email Adress"
-                                type="email"
+                                label="Login"
+                                type="login"
                                 fullWidth
                             />
                             <TextField 

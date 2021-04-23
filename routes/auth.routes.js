@@ -1,6 +1,7 @@
 const {
     Router
 } = require('express');
+const router = Router();
 const dbService = require('../models/userQuery');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
@@ -8,7 +9,6 @@ const {
     check,
     validationResult
 } = require('express-validator');
-const router = Router();
 const dotenv = require('dotenv');
 
 dotenv.config();

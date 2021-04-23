@@ -5,9 +5,12 @@ const app = express()
 
 dotenv.config();
 
-app.use(express.json());
+app.use(express.json({extended:true}));
 
 app.use('/api/auth', require('./routes/auth.routes'))
+app.use('/api/account', require('./routes/account.routes'));
+
+
 
 async function start() {
     try {
