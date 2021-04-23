@@ -1,13 +1,13 @@
 const express = require('express')
 const dotenv = require('dotenv');
 const mysql = require('mysql');
-
 const app = express()
 
 dotenv.config();
-// app.get('/', (req, res) => res.send('Hello World!'))
-app.use('/api/auth', require('./routes/auth.routes'))
 
+app.use(express.json());
+
+app.use('/api/auth', require('./routes/auth.routes'))
 
 async function start() {
     try {

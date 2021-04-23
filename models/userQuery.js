@@ -29,15 +29,14 @@ class DbService {
                     res({...results});
                 })
             });
-            return Object.keys(res).length ? true : false;
+            
+            return res;
         } catch (error) {
             console.log(error);
         }
     }
 
     async createAccount(login, password) {
-        console.log('rrr', password);
-        console.log(typeof (password));
         try {
             const res = await new Promise((res, rej) => {
                 const query = "INSERT INTO account (login, password) VALUES (?,?);";
