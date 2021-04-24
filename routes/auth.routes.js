@@ -114,11 +114,14 @@ router.post('/login',
                             userId: data[0].idAccount
                         },
                         process.env.JWTSECRET, {
-                            expiresIn: "1h"
+                            expiresIn: "24h"
                         }
                     )
 
-                    res.json({token,userId:data[0].idAccount})
+                    res.json({
+                        token,
+                        userId: data[0].idAccount
+                    })
 
                 })
                 .catch(err => {

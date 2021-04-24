@@ -1,11 +1,13 @@
 const express = require('express')
 const dotenv = require('dotenv');
-const mysql = require('mysql');
 const app = express()
+
 
 dotenv.config();
 
-app.use(express.json({extended:true}));
+app.use(express.json({
+    extended: true
+}));
 
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/account', require('./routes/account.routes'));
