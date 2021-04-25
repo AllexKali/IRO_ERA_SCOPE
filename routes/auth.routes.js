@@ -34,10 +34,10 @@ router.post('/signup',
 
             const {
                 login,
-                password
+                password,
+                role = 2,
+                code=""
             } = req.body;
-
-
 
             const db = dbService.getDbServiceInstance();
             const result = db.findIn(login);
@@ -49,11 +49,24 @@ router.post('/signup',
                             message: 'Этот пользователь уже был зарегистрирован'
                         })
                     }
+                    if (role!==1) {
+                        if (code!==process.env.CODE) {
+                            return res.status(400).json({
+                                message: 'Некорректные данные для регистрации'
+                            })
+                        }
+                    }
+
                     const hashedPassword = await bcrypt.hash(password, 12);
-                    const resultCreate = db.createAccount(login, hashedPassword);
+                    const resultCreate = db.createAccount(login, hashedPassword,role);
                     resultCreate
                         .then(data => {
-                            res.status(201).json({
+                            if (!data) {
+                                return res.status(500).json({
+                                    message: "Ошибка сервера. Обратитесь за помощью"
+                                })
+                            }
+                            return res.status(201).json({
                                 message: "Регистрация пользователя прошла успешно"
                             })
                         })
@@ -109,9 +122,14 @@ router.post('/login',
                             message: 'Неверный пароль'
                         })
                     }
-
+                    if (!data) {
+                        return res.status(500).json({
+                            message: "Ошибка сервера. Обратитесь за помощью"
+                        })
+                    }
                     const token = jwt.sign({
-                            userId: data[0].idAccount
+                            userId: data[0].idAccount,
+                            userRole: data[0].idRole
                         },
                         process.env.JWTSECRET, {
                             expiresIn: "12h"

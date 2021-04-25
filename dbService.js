@@ -1,5 +1,7 @@
+//=================ИМПОРТ=================
 const mysql = require('mysql');
 const connData = require('./config/default')
+//=================ИМПОРТ=================
 
 const connection = mysql.createConnection(connData)
 connection.connect(err => {
