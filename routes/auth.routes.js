@@ -2,7 +2,7 @@ const {
     Router
 } = require('express');
 const router = Router();
-const dbService = require('../models/userQuery');
+const dbService = require('../models/regQuery');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const {
@@ -114,7 +114,7 @@ router.post('/login',
                             userId: data[0].idAccount
                         },
                         process.env.JWTSECRET, {
-                            expiresIn: "24h"
+                            expiresIn: "12h"
                         }
                     )
 
