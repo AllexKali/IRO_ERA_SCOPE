@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import dataBase from "../DB";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +28,6 @@ function ListSubject() {
   const [open, setOpen] = React.useState(false);
   const [subjectValue, setSubjectValue] = useState('');
   
-  
   const classes = useStyles();
 
   function openDialog () {
@@ -39,6 +39,8 @@ function ListSubject() {
   };
 
   const handleEnter = (event) => {
+    dataBase.push(({course: 'Курс ' + (dataBase.length + 1), modules: []}));
+    console.log(dataBase[0]);
     Subjects.push(({id: Subjects.length + 1, title: subjectValue}));
     setOpen(false);  
   };

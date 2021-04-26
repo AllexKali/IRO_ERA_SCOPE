@@ -70,7 +70,7 @@ function AppBarTop(props) {
                                 autoFocus
                                 margin="dense"
                                 id="name"
-                                label="Email Adress"
+                                label="Логин"
                                 type="email"
                                 fullWidth
                             />
@@ -78,7 +78,7 @@ function AppBarTop(props) {
                                 autoFocus
                                 margin="dense"
                                 id="pass"
-                                label="Passowrd"
+                                label="Пароль"
                                 type="passowrd"
                                 fullWidth
                             />

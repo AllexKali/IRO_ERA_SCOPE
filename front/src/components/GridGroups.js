@@ -205,8 +205,19 @@ function daysInMonth(month, year) {
 
 const cards = []
 
-for (var i = 1; i <= daysInMonth(3, 2021); i++) {
+let date = new Date();
+
+for (var i = 1; i <= daysInMonth(addZero(date.getMonth() + 1), date.getFullYear()); i++) {
     cards.push(i);  
+}
+
+
+function addZero(mounthNumber) {
+    if (mounthNumber >= 0 && mounthNumber <= 9) {
+		return '0' + mounthNumber;
+	} else {
+		return mounthNumber;
+	}
 }
 
 function GridGroup() {
@@ -241,6 +252,8 @@ function GridGroup() {
         setTime(e.target.value);
     };
 
+    
+
 
   return (
     <Container >
@@ -250,7 +263,7 @@ function GridGroup() {
             <Grid item key={card} xs={12} sm={6} md={3} id = {card}>
                 <CardContent >
                     <Typography variant="h5" gutterBottom>
-                        {card}.03.2021 {/* Устанавливать месяца автоматически */}
+                        {addZero(card)}.{addZero(date.getMonth() + 1)}.{date.getFullYear()} {/* Устанавливать месяца автоматически */}
                     </Typography>
                     
                     <List component="div" disablePadding>
