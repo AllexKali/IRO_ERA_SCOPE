@@ -37,8 +37,8 @@ function ListSubjectItem(props)  {
   };
 
   const handleEnter = (event) => {
-    dataBase[2].modules.push(({moduleTitle: 'Модуль ' + (dataBase[2].modules.length + 1), groups: []}));
-    console.log(dataBase[2]);
+    let courseId = event.target.parentNode;
+    dataBase[0].modules.push(({moduleTitle: 'Модуль ' + (dataBase[0].modules.length + 1), groups: []}));
     Modules.push(({id: Modules.length + 1, title: moduleValue}));
     setOpenList(false);  
   };

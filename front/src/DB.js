@@ -1,11 +1,11 @@
 const dataBase = [
-    {course: 'Курс 1', modules:[
-        {moduleTitle: 'Модуль 1', groups: [
-            {groupTitle: 'Группа 1',  lessons:[
+    {course: 'Курс 1', id: 1, modules:[
+        {moduleTitle: 'Модуль 1', id: 1, groups: [
+            {groupTitle: 'Группа 1', id: 1,  lessons:[
                 {day: [
-                    {id: 1, title: 'Занятие', time: '13:00'},
-                    {id: 2, title: 'Занятие', time: '14:00'},
-                    {id: 3, title: 'Занятие', time: '15:00'}
+                    {id: 1, title: 'Занятие 1', time: '13:00'},
+                    {id: 2, title: 'Занятие 2', time: '14:00'},
+                    {id: 3, title: 'Занятие 3', time: '15:00'}
                 ]},
                 {day: [
                     {id: 4, title: 'Занятие', time: '13:00'},
@@ -28,7 +28,7 @@ const dataBase = [
                     {id: 15, title: 'Занятие', time: '15:00'}
                 ]}
             ]},
-            {groupTitle: 'Группа 2',  lessons:[
+            {groupTitle: 'Группа 2', id: 2,  lessons:[
                 {day: [
                     {id: 1, title: 'Занятие', time: '13:00'},
                     {id: 2, title: 'Занятие', time: '14:00'},
@@ -57,8 +57,8 @@ const dataBase = [
             ]}
             
         ]},
-        {moduleTitle: 'Модуль 2', groups: [
-            {groupTitle: 'Группа 1',  lessons:[
+        {moduleTitle: 'Модуль 2', id: 2, groups: [
+            {groupTitle: 'Группа 1', id: 1,  lessons:[
                 {day: [
                     {id: 1, title: 'Занятие', time: '13:00'},
                     {id: 2, title: 'Занятие', time: '14:00'},
@@ -85,7 +85,7 @@ const dataBase = [
                     {id: 15, title: 'Занятие', time: '15:00'}
                 ]}
             ]},
-            {groupTitle: 'Группа 2',  lessons:[
+            {groupTitle: 'Группа 2', id: 2,  lessons:[
                 {day: [
                     {id: 1, title: 'Занятие', time: '13:00'},
                     {id: 2, title: 'Занятие', time: '14:00'},
@@ -116,9 +116,9 @@ const dataBase = [
         ]}
         
     ]},
-    {course: 'Курс 2', modules:[
-        {moduleTitle: 'Модуль 1', groups: [
-            {groupTitle: 'Группа 1',  lessons:[
+    {course: 'Курс 2', id: 2, modules:[
+        {moduleTitle: 'Модуль 1', id: 1, groups: [
+            {groupTitle: 'Группа 1', id: 1,  lessons:[
                 {day: [
                     {id: 1, title: 'Занятие', time: '13:00'},
                     {id: 2, title: 'Занятие', time: '14:00'},
@@ -145,7 +145,7 @@ const dataBase = [
                     {id: 15, title: 'Занятие', time: '15:00'}
                 ]}
             ]},
-            {groupTitle: 'Группа 2',  lessons:[
+            {groupTitle: 'Группа 2', id: 2,  lessons:[
                 {day: [
                     {id: 1, title: 'Занятие', time: '13:00'},
                     {id: 2, title: 'Занятие', time: '14:00'},
@@ -174,8 +174,8 @@ const dataBase = [
             ]}
             
         ]},
-        {moduleTitle: 'Модуль 2', groups: [
-            {groupTitle: 'Группа 1',  lessons:[
+        {moduleTitle: 'Модуль 2', id: 2, groups: [
+            {groupTitle: 'Группа 1', id: 1,  lessons:[
                 {day: [
                     {id: 1, title: 'Занятие', time: '13:00'},
                     {id: 2, title: 'Занятие', time: '14:00'},
@@ -202,7 +202,7 @@ const dataBase = [
                     {id: 15, title: 'Занятие', time: '15:00'}
                 ]}
             ]},
-            {groupTitle: 'Группа 2',  lessons:[
+            {groupTitle: 'Группа 2', id: 2,  lessons:[
                 {day: [
                     {id: 1, title: 'Занятие', time: '13:00'},
                     {id: 2, title: 'Занятие', time: '14:00'},

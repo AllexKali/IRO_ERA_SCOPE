@@ -47,11 +47,10 @@ function ListModules({module}) {
   }
 
   const handleEnter = (event) => {
-    // dataBase[2].modules.push(({moduleTitle: 'Модуль ' + (dataBase[2].modules.length + 1), groups: []}));
-    // console.log(dataBase[2]);
+    dataBase[0].modules[0].groups.push(({groupTitle: 'Группа ' + (dataBase[0].modules[0].groups.length + 1), lessons: []}));
+    console.log(dataBase[0]);
     Groups.push(({id: Groups.length + 1, title: groupValue}));
     setOpenDialog(false);
-    console.log(Groups);  
   };
 
   return (

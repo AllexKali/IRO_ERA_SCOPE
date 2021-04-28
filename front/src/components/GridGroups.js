@@ -5,6 +5,7 @@ import { CardActions, CardContent, Typography, Dialog, DialogTitle, DialogConten
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Lessons from './Lessons';
+import dataBase from "../DB";
 
 const lessons = [
     {day: [
@@ -208,7 +209,8 @@ const cards = []
 let date = new Date();
 
 for (var i = 1; i <= daysInMonth(addZero(date.getMonth() + 1), date.getFullYear()); i++) {
-    cards.push(i);  
+    cards.push(i);
+      
 }
 
 
@@ -240,6 +242,14 @@ function GridGroup() {
     };
 
     const handleEnter = (e) => {
+         
+        try { 
+            console.log(dataBase[0].modules[0].groups[0].lessons[cardNumber - 1].day);
+        dataBase[0].modules[0].groups[0].lessons[cardNumber - 1].day.push(({id: dataBase[0].modules[0].groups[0].lessons[0].day.length + 1, title: lessonValue, time: time}));
+        
+        } catch {
+            console.log("пусто"); //надо сделать добавление элемента
+        }
         lessons[cardNumber - 1].day.push(({id: lessons.length + 1, title: lessonValue, time: time}));
         setOpen(false);
     };
@@ -252,13 +262,11 @@ function GridGroup() {
         setTime(e.target.value);
     };
 
-    
-
-
   return (
     <Container >
     <Grid container spacing={4} variant="outlined" >
         {cards.map((card) =>(
+            console.log(dataBase[0].modules[0].groups[0].lessons.length),
            l = 0,
             <Grid item key={card} xs={12} sm={6} md={3} id = {card}>
                 <CardContent >
@@ -268,11 +276,27 @@ function GridGroup() {
                     
                     <List component="div" disablePadding>
                         
-                        { lessons[card - 1].day.map(( lesson, index) => {
+                        {/* { lessons[card - 1].day.map(( lesson, index) => {
                             l = l + 1;
                          
                         return <Lessons key={lessons[card - 1].day[l - 1].id} lesson = {lessons[card - 1].day[l - 1].title } time={lessons[card - 1].day[l - 1].time} index={index} />
-                        }) }
+                        }) } */}
+                        {((card - 1) < dataBase[0].modules[0].groups[0].lessons.length)
+                        ?   dataBase[0].modules[0].groups[0].lessons[card - 1].day.map((lesson, index) => {
+                            l = l + 1;
+
+                            return <Lessons key={dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].id} lesson = {dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].title } time={dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].time} index={index} />
+                        }):
+                        <></>
+                        } 
+
+                        {/* {dataBase[0].modules[0].groups[0].lessons[card - 1].day.map(( lesson, index) => { //там где [card - 1] нужно сравнение с dataBase[0].modules[0].groups[0].lessons.lenght иначе работать не будет 
+                            
+                            l = l + 1;
+                         
+                        return <Lessons key={dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].id} lesson = {dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].title } time={dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].time} index={index} />
+                        }) } */}
+                    
                  
                     </List>
                 </CardContent>

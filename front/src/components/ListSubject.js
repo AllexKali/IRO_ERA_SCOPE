@@ -40,7 +40,6 @@ function ListSubject() {
 
   const handleEnter = (event) => {
     dataBase.push(({course: 'Курс ' + (dataBase.length + 1), modules: []}));
-    console.log(dataBase[0]);
     Subjects.push(({id: Subjects.length + 1, title: subjectValue}));
     setOpen(false);  
   };
@@ -57,6 +56,7 @@ function ListSubject() {
       className={classes.main}
     >
       { Subjects.map(subject => {
+        console.log(subject);
         if (subject.id === 0) {
           return(
           <ListItem button onClick={openDialog}>
@@ -64,7 +64,7 @@ function ListSubject() {
           </ListItem>
           )
         } else {
-          return <ListSubjectItem subject={subject.title} key={subject.id}/>
+          return <ListSubjectItem id = {subject.id} subject={subject.title} key={subject.id}/>
         }
       }) }
     </List>
