@@ -41,7 +41,7 @@ class DbService {
     }
 
 
-    // получить аккуантs по названию
+    // создать аккуантs по названию
     async createModule(idSubject, name) {
         try {
             const res = await new Promise((res, rej) => {

@@ -6,6 +6,7 @@ class DbService {
         return instance ? instance : new DbService();
     }
 
+    // найти акк по логину
     async findIn(login) {
         try {
             const res = await new Promise((res, rej) => {
@@ -23,8 +24,8 @@ class DbService {
             console.log(error);
         }
     }
-
-    async createAccount(login, password, role=2) {
+    // создать акк
+    async createAccount(login, password, role = 2) {
         try {
             const res = await new Promise((res, rej) => {
                 const query = "INSERT INTO account (login, password, idRole) VALUES (?,?,?);";

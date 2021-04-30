@@ -23,7 +23,7 @@ router.post('/signup',
     ],
     async (req, res) => {
         try {
-            
+
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({
@@ -36,7 +36,7 @@ router.post('/signup',
                 login,
                 password,
                 role = 2,
-                code=""
+                code = ""
             } = req.body;
 
             const db = dbService.getDbServiceInstance();
@@ -49,8 +49,8 @@ router.post('/signup',
                             message: 'Этот пользователь уже был зарегистрирован'
                         })
                     }
-                    if (role===1) {
-                        if (code!==process.env.CODE) {
+                    if (role === 1) {
+                        if (code !== process.env.CODE) {
                             return res.status(400).json({
                                 message: 'Некорректные данные для регистрации1'
                             })
@@ -58,7 +58,7 @@ router.post('/signup',
                     }
 
                     const hashedPassword = await bcrypt.hash(password, 12);
-                    const resultCreate = db.createAccount(login, hashedPassword,role);
+                    const resultCreate = db.createAccount(login, hashedPassword, role);
                     resultCreate
                         .then(data => {
                             if (!data) {

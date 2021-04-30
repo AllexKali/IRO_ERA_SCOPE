@@ -5,26 +5,14 @@ class DbService {
     static getDbServiceInstance() {
         return instance ? instance : new DbService();
     }
-
-
     // получить все аккуанты
     async getAll() {
-        let obj = {}
         try {
             const res = await new Promise((res, rej) => {
-                db.query(`SELECT * FROM pupil;`, (err, results) => {
+                db.query(`SELECT * FROM lesson;`, (err, results) => {
                     if (err) rej(new Error(err.message));
-                    obj['pupil'] = {
-                        ...results
-                    };
-                });
-                db.query(`SELECT * FROM teacher;`, (err, results) => {
-                    if (err) rej(new Error(err.message));
-                    obj['teacher'] = {
-                        ...results
-                    };
                     res({
-                        ...obj
+                        ...results
                     })
                 })
             });
@@ -33,16 +21,53 @@ class DbService {
             console.log(error);
         }
     }
-    // получить данные своего аккаунта
-    async getYourData(id, role) {
+
+    // получить аккуантs по названию
+    async getLessonByName(name) {
         try {
             const res = await new Promise((res, rej) => {
-                const query = `SELECT * FROM ${role} WHERE idAccount=?;`;
+                const query = "SELECT * FROM lesson WHERE name=?;";
+                db.query(query, [name], (err, results) => {
+                    if (err) rej(new Error(err.message));
+                    res({
+                        ...results
+                    })
+                })
+            });
+            return res;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // создать аккуантs по названию
+    async createLesson(idModule, idGrade, name, hours) {
+        try {
+            const res = await new Promise((res, rej) => {
+                const query = "INSERT INTO lesson (idModule,idGrade,name,hours) VALUES (?,?,?,?);";
+                db.query(query, [idModule, idGrade, name, hours], (err, results) => {
+                    if (err) rej(new Error(err.message));
+                    res({
+                        ...results
+                    })
+                })
+            });
+            return res;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // удалить аккуантs по id
+    async delLesson(id) {
+        try {
+            const res = await new Promise((res, rej) => {
+                const query = "DELETE FROM lesson WHERE idLesson=?;";
                 db.query(query, [id], (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
                         ...results
-                    });
+                    })
                 })
             });
             return res;
@@ -51,16 +76,16 @@ class DbService {
         }
     }
 
-    // Редактирование данные своего аккаунта
-    async editData(role, id, whichData, newData) {
+    // обновить аккуантs по id
+    async updateLesson(whichData, newData, id) {
         try {
             const res = await new Promise((res, rej) => {
-                const query = `UPDATE ${role} SET ${whichData} = ? WHERE idAccount = ?;`;
+                const query = `UPDATE lesson SET ${whichData} = ? WHERE idLesson = ?;`;
                 db.query(query, [newData, id], (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
                         ...results
-                    });
+                    })
                 })
             });
             return res;
@@ -69,26 +94,7 @@ class DbService {
         }
     }
 
-    // Сохран данных своего аккаунта
-    async createData(fname, mname, lname, role, id) {
-        try {
-            const res = await new Promise((res, rej) => {
-                const query = `INSERT INTO ${role} (idAccount, first_name, middle_name, last_name) values (?,?,?,?);`;
-                db.query(query, [id, fname, mname, lname], (err, results) => {
-                    if (err) rej(new Error(err.message));
-                    res({
-                        ...results
-                    });
-                })
-            });
-            return res;
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
 }
-
-
 
 module.exports = DbService;

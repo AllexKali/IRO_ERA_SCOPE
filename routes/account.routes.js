@@ -276,7 +276,7 @@ router.get('*',
                     const result = db.getAll();
                     result
                         .then(async (data) => {
- 
+
                             data = Object.values(JSON.parse(JSON.stringify(data)));
                             res.json(data);
                         })

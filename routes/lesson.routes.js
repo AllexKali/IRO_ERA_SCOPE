@@ -5,7 +5,7 @@ const {
 const router = Router();
 const auth = require('../middleware/auth.middleware');
 const dbAuth = require('../models/authQuery');
-const dbService = require('../models/moduleQuery');
+const dbService = require('../models/lessonQuery');
 //=================ИМПОРТ=================
 
 function toRuleList(data) {
@@ -17,7 +17,7 @@ function toRuleList(data) {
 }
 
 
-// ADD /module/create
+// ADD /lesson/create
 router.post('/create',
     auth,
     async (req, res) => {
@@ -27,18 +27,20 @@ router.post('/create',
             rulesResult
                 .then(async (data) => {
                     const ruleList = toRuleList(data);
-                    if (!ruleList.includes('createModule')) {
+                    if (!ruleList.includes('createLessons')) {
                         res.status(400).json({
                             message: "Нет доступа"
                         });
                     }
 
                     const {
-                        idSubject,
-                        name
+                        idModule,
+                        idGrade = null,
+                        name,
+                        hours = null
                     } = req.body;
 
-                    if (!idSubject || !name) {
+                    if (!idModule || !name) {
                         return res.status(400).json({
                             message: 'Ошибка клиента. Заполните данные!'
                         })
@@ -46,7 +48,7 @@ router.post('/create',
 
 
                     const db = dbService.getDbServiceInstance();
-                    const result = db.createModule(idSubject, name)
+                    const result = db.createLesson(idModule, idGrade, name, hours)
                         .then(async (data) => {
                             if (!data) {
                                 return res.status(500).json({
@@ -55,7 +57,7 @@ router.post('/create',
                             }
 
                             return res.status(201).json({
-                                message: "Модуль успешно создан"
+                                message: "Урок успешно создан"
                             })
                         }).catch(err => {
                             console.log(err);
@@ -73,7 +75,7 @@ router.post('/create',
         }
     })
 
-// UPDATE /module/update
+// UPDATE /lesson/update
 router.patch('/update',
     auth,
     async (req, res) => {
@@ -83,7 +85,7 @@ router.patch('/update',
             rulesResult
                 .then(async (data) => {
                     const ruleList = toRuleList(data);
-                    if (!ruleList.includes('editModule')) {
+                    if (!ruleList.includes('editLessons')) {
                         res.status(400).json({
                             message: "Нет доступа"
                         });
@@ -101,7 +103,7 @@ router.patch('/update',
                     }
 
                     const db = dbService.getDbServiceInstance();
-                    const result = db.updateModule(whichData, newData, id)
+                    const result = db.updateLesson(whichData, newData, id)
                         .then(async (data) => {
                             if (!data) {
                                 return res.status(500).json({
@@ -127,7 +129,7 @@ router.patch('/update',
         }
     })
 
-// DELETE /module/delete/:id
+// DELETE /lesson/delete/:id
 router.delete('/delete/:id',
     auth,
     async (req, res) => {
@@ -137,14 +139,14 @@ router.delete('/delete/:id',
             rulesResult
                 .then(async (data) => {
                     const ruleList = toRuleList(data);
-                    if (!ruleList.includes('createModule')) {
+                    if (!ruleList.includes('createLessons')) {
                         res.status(400).json({
                             message: "Нет доступа"
                         });
                     }
 
                     const db = dbService.getDbServiceInstance();
-                    const result = db.delModule(req.params.id)
+                    const result = db.delLesson(req.params.id)
                         .then(async (data) => {
                             if (!data) {
                                 return res.status(500).json({
@@ -171,13 +173,13 @@ router.delete('/delete/:id',
         }
     })
 
-// SEARCH /module/search/:name
+// SEARCH /lesson/search/:name
 router.get('/search/:name',
     auth,
     async (req, res) => {
         try {
             const db = dbService.getDbServiceInstance();
-            const result = db.getModuleByName(req.params.name);
+            const result = db.getLessonByName(req.params.name);
             result
                 .then(async (data) => {
                     if (!data) {
@@ -203,7 +205,7 @@ router.get('/search/:name',
         }
     })
 
-// READ /module/
+// READ /lesson/
 router.get('*',
     auth,
     async (req, res) => {

@@ -73,11 +73,11 @@ router.post('/add',
                                     console.log(err);
                                 });
 
-                                if (!fname || !lname || !roledata || !userI) {
-                                    return res.status(400).json({
-                                        message: 'Ошибка клиента. Заполните данные!'
-                                    })
-                                }
+                            if (!fname || !lname || !roledata || !userI) {
+                                return res.status(400).json({
+                                    message: 'Ошибка клиента. Заполните данные!'
+                                })
+                            }
 
                             const resultCreate = db.createData(fname, mname, lname, roledata, userId);
                             resultCreate
@@ -131,7 +131,7 @@ router.patch('/update',
                 id
             } = req.body;
 
-         
+
 
             const rulesResult = dbAuth.getAuthRules(userId);
             rulesResult
@@ -174,7 +174,7 @@ router.patch('/update',
                                 roledata = chRole;
                                 userId = id;
                             }
-                            if (!roledata || !userId|| !whichData || !newData) {
+                            if (!roledata || !userId || !whichData || !newData) {
                                 return res.status(400).json({
                                     message: 'Ошибка клиента. Заполните данные!'
                                 })

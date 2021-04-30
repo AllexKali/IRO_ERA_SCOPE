@@ -3,7 +3,7 @@ let instance = null;
 
 class DbService {
 
-
+    // Получить права роли
     static getAuthRules(id) {
         try {
             const res = new Promise((res, rej) => {
@@ -32,10 +32,10 @@ class DbService {
         }
     }
 
-
+    // Получить роль
     static getRole(id) {
         try {
-            const res =  new Promise((res, rej) => {
+            const res = new Promise((res, rej) => {
                 const query = "SELECT role FROM role WHERE idRole=?;";
                 db.query(query, [id], (err, results) => {
                     if (err) rej(new Error(err.message));

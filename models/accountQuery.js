@@ -86,7 +86,6 @@ class DbService {
     }
 
     // Редактирование аккаунта
-
     async editRole(role, login) {
         try {
             const res = await new Promise((res, rej) => {
@@ -105,7 +104,6 @@ class DbService {
     }
 
     // Удаление аккаунта
-
     async deleteAcc(login) {
         try {
             const res = await new Promise((res, rej) => {
