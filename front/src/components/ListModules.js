@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  item: {
+      backgroundColor: "#e0e0e0"
+  }
 }));
 
 const Groups = [
@@ -24,7 +27,9 @@ const Groups = [
   {id: 3, title: 'Группа 3'}
 ]
 
-function ListModules({module}) {
+function ListModules(props) {
+  console.log(props.course + ' ListModules');
+  console.log(props.id + ' ListModules  ID');
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const [groupValue, setGroupValue] = React.useState('');
@@ -32,6 +37,9 @@ function ListModules({module}) {
   
 
   const classes = useStyles();
+
+  const classes1 = classes.nested + ' ' + classes.item;
+
   const [openInner, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -47,7 +55,7 @@ function ListModules({module}) {
   }
 
   const handleEnter = (event) => {
-    dataBase[0].modules[0].groups.push(({groupTitle: 'Группа ' + (dataBase[0].modules[0].groups.length + 1), lessons: []}));
+    dataBase[props.course].modules[props.id - 1].groups.push(({groupTitle: groupValue, lessons: []}));
     console.log(dataBase[0]);
     Groups.push(({id: Groups.length + 1, title: groupValue}));
     setOpenDialog(false);
@@ -55,12 +63,20 @@ function ListModules({module}) {
 
   return (
     <>
-        <ListItem button className={classes.nested} onClick={handleClick}>
-            <ListItemText primary={module} />
+      {(props.id % 2 === 0)
+      ?<> <ListItem button className={classes1} onClick={handleClick} >
+            <ListItemText primary={props.module} />
             {!openInner ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
+        </>:
+        <> <ListItem button className={classes.nested} onClick={handleClick}>
+        <ListItemText primary={props.module} />
+        {!openInner ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+    </>
+      }
         <Collapse in={!openInner} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+            {/* <List component="div" disablePadding>
                 { Groups.map(group => {
                 if (group.id === 0) {
                   return(
@@ -71,6 +87,16 @@ function ListModules({module}) {
                 } else {
                   return <ListGroups group={group.title} key={group.id}/>
                 }
+                }) }
+            </List> */}
+            <ListItem button onClick={openDialogWindow}>
+                    <ListItemText primary={'Создать группу'} className={classes.nested}/>
+                  </ListItem>
+            <List component="div" disablePadding>
+                { dataBase[props.course].modules[props.id - 1].groups.map(group => {
+                 
+                  return <ListGroups group={group.groupTitle} key={group.id} lessons={[]}/>
+                
                 }) }
             </List>
         </Collapse>

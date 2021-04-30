@@ -1,5 +1,5 @@
 import React from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -11,6 +11,20 @@ import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@m
 import Button from '@material-ui/core/Button';
 import dataBase from "../DB";
 
+const useStyles = makeStyles((theme) => ({
+  main: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+    marginTop: theme.spacing(9)
+  },
+  item: {
+      backgroundColor: "#e0e0e0"
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  }
+}));
+
 const Modules = [
   {id: 0, title: 'Добавить модуль'},
   {id: 1, title: 'Модуль 1'},
@@ -20,7 +34,7 @@ const Modules = [
 
 function ListSubjectItem(props)  {
   
-    
+  const classes = useStyles();  
 
   const [open, setOpen] = React.useState(true);
   const [openList, setOpenList] = React.useState(false);
@@ -37,7 +51,7 @@ function ListSubjectItem(props)  {
   };
 
   const handleEnter = (event) => {
-    dataBase[0].modules.push(({moduleTitle: 'Модуль ' + (dataBase[0].modules.length + 1), groups: []}));
+    dataBase[props.id - 1].modules.push(({moduleTitle: moduleValue, groups: [], id: (dataBase[props.id - 1].modules.length + 1)}));
     Modules.push(({id: Modules.length + 1, title: moduleValue}));
     setOpenList(false);  
   };
@@ -49,8 +63,8 @@ function ListSubjectItem(props)  {
   return (
     <>
       {/* {console.log(dataBase[0].course[0].module[0].groups[0].day[0].id)}     */}
-      <ListItem button onClick={handleClick}>
-        <ListItemText primary={props.subject} />
+      {/* <ListItem button onClick={handleClick}>
+        <ListItemText primary={props.course} />
         {!open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={!open} timeout="auto" unmountOnExit>
@@ -65,6 +79,30 @@ function ListSubjectItem(props)  {
           } else {
             return <ListModules module={module.title} key={module.id}/>
           }
+      }) }
+        </List> */}
+        {(props.id % 2 === 0)
+        ?<> <ListItem button onClick={handleClick} className={classes.item}>
+        <ListItemText primary={props.course} />
+        {!open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      </>:
+      <>
+      <ListItem button onClick={handleClick} >
+        <ListItemText primary={props.course} />
+        {!open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      </>
+      }
+      <Collapse in={!open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+        <ListItem button onClick={openDialog} className={classes.nested}>
+          <ListItemText primary={'Добавить модуль'} />
+        </ListItem>
+        { dataBase[props.id - 1].modules.map(module => {
+          
+          return <ListModules module={module.moduleTitle} key={module.id} groups={[]} course={props.id - 1} id={module.id}/>
+          
       }) }
         </List>
       </Collapse>

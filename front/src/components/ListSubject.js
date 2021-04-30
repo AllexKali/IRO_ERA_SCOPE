@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(9)
+  },
+  item: {
+      backgroundColor: "#e0e0e0"
   }
 }));
 
@@ -39,7 +42,7 @@ function ListSubject() {
   };
 
   const handleEnter = (event) => {
-    dataBase.push(({course: 'Курс ' + (dataBase.length + 1), modules: []}));
+    dataBase.push(({course: subjectValue, modules: [], id: dataBase.length + 1}));
     Subjects.push(({id: Subjects.length + 1, title: subjectValue}));
     setOpen(false);  
   };
@@ -55,7 +58,7 @@ function ListSubject() {
       aria-labelledby="nested-list-subheader"
       className={classes.main}
     >
-      { Subjects.map(subject => {
+      {/* { Subjects.map(subject => {
         if (subject.id === 0) {
           return(
           <ListItem button onClick={openDialog}>
@@ -65,6 +68,15 @@ function ListSubject() {
         } else {
           return <ListSubjectItem id = {subject.id} subject={subject.title} key={subject.id}/>
         }
+      }) } */}
+      
+      <ListItem button onClick={openDialog}  className={classes.item}>
+          <ListItemText primary={'Добавить курс'} />
+      </ListItem>
+      { dataBase.map(dataBas => {
+        
+          return <ListSubjectItem id = {dataBas.id} course={dataBas.course} key={dataBas.id} modules={[]} />
+        
       }) }
     </List>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">

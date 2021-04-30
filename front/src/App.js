@@ -7,6 +7,7 @@ import GridGroup from './components/GridGroups';
 import Welcome from './components/Welcome';
 import ThemeContext from "./Context";
 import users from "./users";
+import AdminPage from './components/AdminPage';
 
 
 
@@ -70,10 +71,7 @@ try {
       <AppBarTop role={role}/>
       <Container className={classes.main}> 
       
-      {(status === 'false')
-      ?(<ListSubject className={classes.main} />) :
-      <GridGroup/>
-      }
+      <AdminPage />
       
       </Container>
       </>

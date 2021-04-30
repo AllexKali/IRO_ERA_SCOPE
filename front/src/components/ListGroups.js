@@ -10,14 +10,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ListGroup({group}) {
+function ListGroup(props) {
   let { setstatus} = useContext(ThemeContext)
 
   const classes = useStyles();
 
   return (
         <ListItem button className={classes.nested} onClick={status => setstatus(status)}>
-            <ListItemText primary={group} />
+            <ListItemText primary={props.group} />
         </ListItem>
   );
 }

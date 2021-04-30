@@ -46,13 +46,15 @@ function AppBarTop(props) {
     }
 
     const handleCloseEnter1 = () => {
+        
         if (users.find(userSearch1) !== undefined) {
             document.getElementById('login').value = 'пользователь с таким именем уже существует';    
         } else {
-            users.push(({login: document.getElementById('login').value, password: document.getElementById('pass').value, role: 'student'}));
+            users.push(({id: users.length + 1, login: document.getElementById('login').value, password: document.getElementById('pass').value, role: 'student'}));
             document.getElementById('login').value = 'успешно';
             props.handleCloseEnter('');
         }
+        console.log(users);
     }
 
     try {
