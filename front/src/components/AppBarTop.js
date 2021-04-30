@@ -4,6 +4,7 @@ import { Container, AppBar, Toolbar, IconButton, Box, makeStyles, Dialog, Dialog
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import ThemeContext from "../Context";
+import users from "../users";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +22,14 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
+
+
 function AppBarTop(props) {
+    function userSearch1(login){
+        console.log(props.role);
+        return login.login === props.role;  
+    }
+
     let {status, setstatus} = useContext(ThemeContext)
 
     const classes = useStyles();
@@ -29,7 +37,7 @@ function AppBarTop(props) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-        console.log(props.role);
+        
         setOpen(true);
     }
 
@@ -37,20 +45,32 @@ function AppBarTop(props) {
         setOpen(false);
     }
 
+    const handleCloseEnter1 = () => {
+        if (users.find(userSearch1) !== undefined) {
+            document.getElementById('login').value = 'пользователь с таким именем уже существует';    
+        } else {
+            users.push(({login: document.getElementById('login').value, password: document.getElementById('pass').value, role: 'student'}));
+            document.getElementById('login').value = 'успешно';
+            props.handleCloseEnter('');
+        }
+    }
+
+    try {
     return (
     <AppBar position="fixed">
         <Container fixed>
             <Toolbar> 
-                <IconButton edge="start"
-                color="inherit" aria-label="menu" className={classes.menuButton}> 
+                <IconButton edge="start" color="inherit" aria-label="menu" className={classes.menuButton}> 
                     <MenuIcon />
                 </IconButton>
-                {(props.role === 'учитель' || props.role === 'ученик' || props.role === 'куратор')
+                
+                
+                {(users.find(userSearch1).role === 'teacher'  || users.find(userSearch1).role === 'student' || users.find(userSearch1).role === 'admin')
                 ?   (<Typography className={classes.Button}>{props.role}</Typography>) :
                 <></>
                 }
                 <Box >
-                {(props.role === 'учитель' || props.role === 'ученик' || props.role === 'куратор')
+                {(users.find(userSearch1).role === 'teacher' || users.find(userSearch1).role === 'student' || users.find(userSearch1).role === 'admin')
     
                     ? (<><Button variant="contained" color="secondary" onClick={() => props.handleCloseEnter('') }className={classes.Button}>Выйти</Button>
                     {(status !== 'false')
@@ -69,9 +89,9 @@ function AppBarTop(props) {
                             <TextField 
                                 autoFocus
                                 margin="dense"
-                                id="name"
+                                id="login"
                                 label="Логин"
-                                type="email"
+                                type="login"
                                 fullWidth
                             />
                             <TextField 
@@ -85,7 +105,8 @@ function AppBarTop(props) {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose} color="primary">Отмена</Button>
-                            <Button onClick={() => props.handleCloseEnter(document.getElementById('name').value)} color="primary">Войти</Button>
+                            <Button onClick={() => props.handleCloseEnter(document.getElementById('login').value)} color="primary">Войти</Button>
+                            <Button onClick={handleCloseEnter1} color="primary">Регистрация</Button>
                         </DialogActions>
                     </Dialog>
                     </>
@@ -96,5 +117,49 @@ function AppBarTop(props) {
         </Container>
     </AppBar>
     );
+    } catch {
+        return (
+        <AppBar position="fixed">
+            <Container fixed>
+                <Toolbar> 
+                    <IconButton edge="start" color="inherit" aria-label="menu" className={classes.menuButton}> 
+                        <MenuIcon />
+                    </IconButton>
+                    <Box > 
+                        <Button variant="contained" onClick={handleClickOpen}>Войти</Button> 
+    
+                        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Вход</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText> Авторизация</DialogContentText>
+                                <TextField 
+                                    autoFocus
+                                    margin="dense"
+                                    id="login"
+                                    label="Логин"
+                                    type="login"
+                                    fullWidth
+                                />
+                                <TextField 
+                                    autoFocus
+                                    margin="dense"
+                                    id="pass"
+                                    label="Пароль"
+                                    type="passowrd"
+                                    fullWidth
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} color="primary">Отмена</Button>
+                                <Button onClick={() => props.handleCloseEnter(document.getElementById('login').value)} color="primary">Войти</Button>
+                                <Button onClick={handleCloseEnter1} color="primary">Регистрация</Button>
+                            </DialogActions>
+                        </Dialog>          
+                    </Box>
+                </Toolbar>
+            </Container>
+        </AppBar>
+        );    
+    }
 }
 export default AppBarTop;

@@ -6,6 +6,7 @@ import ListSubject from './components/ListSubject';
 import GridGroup from './components/GridGroups';
 import Welcome from './components/Welcome';
 import ThemeContext from "./Context";
+import users from "./users";
 
 
 
@@ -33,10 +34,16 @@ const AccountRole = ({ role }) => {
   const {status} = useContext(ThemeContext)
   const classes = useStyles();
 
-  if (role === 'учитель') { 
+  function userSearch(login){
+    return login.login === role;
+  }
+try {
+  if (users.find(userSearch).role === 'teacher') { 
+    
     return (
       <>
-      <AppBarTop/>
+      <AppBarTop  role={role}/>
+      
       <Container className={classes.main}> {/*Нужен для центровки содержимого*/}
       
       {(status === 'false')
@@ -47,19 +54,20 @@ const AccountRole = ({ role }) => {
       </Container>
       </>
     );
-  } else  if (role === 'ученик'){
+  } else  if (users.find(userSearch).role === 'student'){
+    
     return (
       <>
-      <AppBarTop/>
+      <AppBarTop role={role}/>
       <Container className={classes.main}>  
       <GridGroup/>
       </Container>
       </>
     );
-  } else if (role === 'куратор') {
+  } else if (users.find(userSearch).role === 'admin') {
     return (
       <>
-      <AppBarTop/>
+      <AppBarTop role={role}/>
       <Container className={classes.main}> 
       
       {(status === 'false')
@@ -79,10 +87,19 @@ const AccountRole = ({ role }) => {
       </>
     )
   }
+} catch {
+  
+  return (
+    <>
+    <AppBarTop />
+    <Welcome />
+    </>
+  )  
+}
 }
 
 const App = () => {
-  const [role1, setRole1] = useState('учитель')
+  const [role1, setRole1] = useState('teacher')
   return(
     <>
     <AccountRole role={role1}/>

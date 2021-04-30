@@ -37,7 +37,6 @@ function ListSubjectItem(props)  {
   };
 
   const handleEnter = (event) => {
-    let courseId = event.target.parentNode;
     dataBase[0].modules.push(({moduleTitle: 'Модуль ' + (dataBase[0].modules.length + 1), groups: []}));
     Modules.push(({id: Modules.length + 1, title: moduleValue}));
     setOpenList(false);  

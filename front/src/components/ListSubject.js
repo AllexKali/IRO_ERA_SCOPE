@@ -56,7 +56,6 @@ function ListSubject() {
       className={classes.main}
     >
       { Subjects.map(subject => {
-        console.log(subject);
         if (subject.id === 0) {
           return(
           <ListItem button onClick={openDialog}>
