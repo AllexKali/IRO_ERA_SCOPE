@@ -67,7 +67,6 @@ class DbService {
     }
 } 
 
-
 // Сохран данных своего аккаунта
            
  async createData(fname,mname,lname,role,id) {

@@ -10,10 +10,11 @@ app.use(express.json({
     extended: true
 }));
 
+
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/account', require('./routes/account.routes'));
 app.use('/api/accountdata', require('./routes/accountData.routes'));
-
+app.use('/api/subject', require('./routes/subject.routes'));
 
 async function start() {
     try {

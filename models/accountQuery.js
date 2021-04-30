@@ -29,7 +29,7 @@ class DbService {
         try {
             const res = await new Promise((res, rej) => {
                 const query = `
-                SELECT login, schedule.account.idRole, role
+                SELECT idAccount,login, schedule.account.idRole, role
                 FROM schedule.account
                 LEFT JOIN schedule.role
                 ON schedule.account.idRole LIKE schedule.role.idRole;`;

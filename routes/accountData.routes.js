@@ -34,6 +34,10 @@ router.post('/add',
                         });
                     }
 
+                    let {
+                        userId,
+                        userRole
+                    } = req.user;
                     const {
                         fname,
                         mname = null,
@@ -42,15 +46,18 @@ router.post('/add',
                         id = ''
                     } = req.body;
 
-                    let {
-                        userId,
-                        userRole
-                    } = req.user;
+
                     const role = dbAuth.getRole(userRole)
                         .then(async (roledata) => {
                             if (roledata === "admin") {
                                 roledata = chRole;
                                 userId = id;
+                            }
+
+                            if (!userId || !roledata) {
+                                return res.status(400).json({
+                                    message: 'Ошибка клиента. Заполните данные!'
+                                })
                             }
                             const db = dbService.getDbServiceInstance();
                             const result = db.getYourData(userId, roledata);
@@ -65,6 +72,12 @@ router.post('/add',
                                 .catch(err => {
                                     console.log(err);
                                 });
+
+                                if (!fname || !lname || !roledata || !userI) {
+                                    return res.status(400).json({
+                                        message: 'Ошибка клиента. Заполните данные!'
+                                    })
+                                }
 
                             const resultCreate = db.createData(fname, mname, lname, roledata, userId);
                             resultCreate
@@ -114,9 +127,12 @@ router.patch('/update',
             const {
                 whichData,
                 newData,
-                chRole="teacher",
+                chRole = "teacher",
                 id
             } = req.body;
+
+         
+
             const rulesResult = dbAuth.getAuthRules(userId);
             rulesResult
                 .then(async (data) => {
@@ -158,28 +174,32 @@ router.patch('/update',
                                 roledata = chRole;
                                 userId = id;
                             }
-                       
-
-                    const result = db.editData(roledata, userId, whichData, newData);
-
-                    result
-                        .then(async (data) => {
-                            if (!data) {
-                                return res.status(500).json({
-                                    message: "Ошибка сервера. Обратитесь за помощью"
+                            if (!roledata || !userId|| !whichData || !newData) {
+                                return res.status(400).json({
+                                    message: 'Ошибка клиента. Заполните данные!'
                                 })
                             }
-                            return res.status(201).json({
-                                message: "Данные изменены"
-                            })
+
+                            const result = db.editData(roledata, userId, whichData, newData);
+
+                            result
+                                .then(async (data) => {
+                                    if (!data) {
+                                        return res.status(500).json({
+                                            message: "Ошибка сервера. Обратитесь за помощью"
+                                        })
+                                    }
+                                    return res.status(201).json({
+                                        message: "Данные изменены"
+                                    })
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                });
                         })
                         .catch(err => {
                             console.log(err);
                         });
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
 
                 })
                 .catch(err => {
@@ -195,8 +215,54 @@ router.patch('/update',
 
 // _________readAccount__________
 
-// SEARCH /api/accountdata/
-router.get('/',
+
+// READ /api/accountdata/view
+router.get('/view',
+    auth,
+    async (req, res) => {
+        try {
+            const rulesResult = dbAuth.getAuthRules(req.user.userId);
+            rulesResult
+                .then(async (data) => {
+
+                    const ruleList = toRuleList(data);
+                    if (!ruleList.includes('editAllData')) {
+                        res.status(400).json({
+                            message: "Нет доступа"
+                        });
+                    }
+
+
+                    const db = dbService.getDbServiceInstance();
+                    const result = db.getAll();
+                    result
+                        .then(async (data) => {
+                            if (!data) {
+                                return res.status(500).json({
+                                    message: "Ошибка сервера. Обратитесь за помощью"
+                                })
+                            }
+                            res.json(data);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
+        } catch (e) {
+            console.log(e.message);
+            res.status(500).json({
+                message: "Ошибка сервера. Попробуйте еще раз"
+            });
+        }
+    })
+
+// read /api/accountdata/
+router.get('*',
     auth,
     async (req, res) => {
         try {
@@ -238,51 +304,6 @@ router.get('/',
                 .catch(err => {
                     console.log(err);
                 });
-        } catch (e) {
-            console.log(e.message);
-            res.status(500).json({
-                message: "Ошибка сервера. Попробуйте еще раз"
-            });
-        }
-    })
-
-// READ /api/accountdata/view
-router.get('/view',
-    auth,
-    async (req, res) => {
-        try {
-            const rulesResult = dbAuth.getAuthRules(req.user.userId);
-            rulesResult
-                .then(async (data) => {
-
-                    const ruleList = toRuleList(data);
-                    if (!ruleList.includes('editAllData')) {
-                        res.status(400).json({
-                            message: "Нет доступа"
-                        });
-                    }
-
-
-                    const db = dbService.getDbServiceInstance();
-                    const result = db.getAll();
-                    result
-                        .then(async (data) => {
-                            if (!data) {
-                                return res.status(500).json({
-                                    message: "Ошибка сервера. Обратитесь за помощью"
-                                })
-                            }
-                            res.json(data);
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
-
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-
         } catch (e) {
             console.log(e.message);
             res.status(500).json({

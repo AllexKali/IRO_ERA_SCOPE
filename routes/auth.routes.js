@@ -23,8 +23,8 @@ router.post('/signup',
     ],
     async (req, res) => {
         try {
+            
             const errors = validationResult(req);
-
             if (!errors.isEmpty()) {
                 return res.status(400).json({
                     errors: errors.array(),
@@ -49,10 +49,10 @@ router.post('/signup',
                             message: 'Этот пользователь уже был зарегистрирован'
                         })
                     }
-                    if (role!==1) {
+                    if (role===1) {
                         if (code!==process.env.CODE) {
                             return res.status(400).json({
-                                message: 'Некорректные данные для регистрации'
+                                message: 'Некорректные данные для регистрации1'
                             })
                         }
                     }
