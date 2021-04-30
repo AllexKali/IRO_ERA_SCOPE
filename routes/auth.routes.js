@@ -13,7 +13,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// SIGN UP  /api/auth/signup
+// SIGN UP  /auth/signup
 router.post('/signup',
     [
         check('login', 'Введите логин').exists(),
@@ -84,7 +84,7 @@ router.post('/signup',
         }
     })
 
-// LOG IN  /api/auth/login
+// LOG IN  /auth/login
 router.post('/login',
     [
         check('login', 'Некорректный логин').exists(),

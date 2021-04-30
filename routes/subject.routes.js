@@ -17,7 +17,7 @@ function toRuleList(data) {
 }
 
 
-// ADD /api/subject/create
+// ADD /subject/create
 router.post('/create',
     auth,
     async (req, res) => {
@@ -73,7 +73,7 @@ router.post('/create',
         }
     })
 
-// UPDATE /api/subject/update
+// UPDATE /subject/update
 router.patch('/update',
     auth,
     async (req, res) => {
@@ -129,7 +129,7 @@ router.patch('/update',
         }
     })
 
-// DELETE /api/subject/delete/:id
+// DELETE /subject/delete/:id
 router.delete('/delete/:id',
     auth,
     async (req, res) => {
@@ -173,7 +173,7 @@ router.delete('/delete/:id',
         }
     })
 
-// SEARCH /api/subject/search/:name
+// SEARCH /subject/search/:name
 router.get('/search/:name',
     auth,
     async (req, res) => {
@@ -205,7 +205,7 @@ router.get('/search/:name',
         }
     })
 
-// READ /api/subject/
+// READ /subject
 router.get('*',
     auth,
     async (req, res) => {

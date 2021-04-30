@@ -40,7 +40,7 @@ class DbService {
         }
     }
 
-   
+
     // получить аккуантs по названию
     async createModule(idSubject, name) {
         try {
@@ -59,42 +59,42 @@ class DbService {
         }
     }
 
-   // удалить аккуантs по id
-   async delModule(id) {
-    try {
-        const res = await new Promise((res, rej) => {
-            const query = "DELETE FROM module WHERE idSubject=?;";
-            db.query(query, [id], (err, results) => {
-                if (err) rej(new Error(err.message));
-                res({
-                    ...results
+    // удалить аккуантs по id
+    async delModule(id) {
+        try {
+            const res = await new Promise((res, rej) => {
+                const query = "DELETE FROM module WHERE idModule=?;";
+                db.query(query, [id], (err, results) => {
+                    if (err) rej(new Error(err.message));
+                    res({
+                        ...results
+                    })
                 })
-            })
-        });
-        return res;
-    } catch (error) {
-        console.log(error);
+            });
+            return res;
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
-    
-  // удалить аккуантs по id
-  async updateModule(whichData, newData, id) {
-    try {
-        const res = await new Promise((res, rej) => {
-            const query = `UPDATE module SET ${whichData} = ? WHERE idSubject = ?;`;
-            db.query(query, [newData, id], (err, results) => {
-                if (err) rej(new Error(err.message));
-                res({
-                    ...results
+
+    // обновить аккуантs по id
+    async updateModule(whichData, newData, id) {
+        try {
+            const res = await new Promise((res, rej) => {
+                const query = `UPDATE module SET ${whichData} = ? WHERE idModule = ?;`;
+                db.query(query, [newData, id], (err, results) => {
+                    if (err) rej(new Error(err.message));
+                    res({
+                        ...results
+                    })
                 })
-            })
-        });
-        return res;
-    } catch (error) {
-        console.log(error);
+            });
+            return res;
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
-    
+
 
 }
 

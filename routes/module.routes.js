@@ -17,7 +17,7 @@ function toRuleList(data) {
 }
 
 
-// ADD /api/module/create
+// ADD /module/create
 router.post('/create',
     auth,
     async (req, res) => {
@@ -73,7 +73,7 @@ router.post('/create',
         }
     })
 
-// UPDATE /api/module/update
+// UPDATE /module/update
 router.patch('/update',
     auth,
     async (req, res) => {
@@ -83,7 +83,7 @@ router.patch('/update',
             rulesResult
                 .then(async (data) => {
                     const ruleList = toRuleList(data);
-                    if (!ruleList.includes('editSubject')) {
+                    if (!ruleList.includes('editModule')) {
                         res.status(400).json({
                             message: "Нет доступа"
                         });
@@ -101,7 +101,7 @@ router.patch('/update',
                     }
 
                     const db = dbService.getDbServiceInstance();
-                    const result = db.updateSubj(whichData, newData, id)
+                    const result = db.updateModule(whichData, newData, id)
                         .then(async (data) => {
                             if (!data) {
                                 return res.status(500).json({
@@ -116,8 +116,6 @@ router.patch('/update',
                             console.log(err);
                         })
 
-
-
                 }).catch(err => {
                     console.log(err);
                 });
@@ -129,7 +127,7 @@ router.patch('/update',
         }
     })
 
-// DELETE /api/module/delete/:id
+// DELETE /module/delete/:id
 router.delete('/delete/:id',
     auth,
     async (req, res) => {
@@ -139,14 +137,14 @@ router.delete('/delete/:id',
             rulesResult
                 .then(async (data) => {
                     const ruleList = toRuleList(data);
-                    if (!ruleList.includes('createSubject')) {
+                    if (!ruleList.includes('createModule')) {
                         res.status(400).json({
                             message: "Нет доступа"
                         });
                     }
 
                     const db = dbService.getDbServiceInstance();
-                    const result = db.delSubj(req.params.id)
+                    const result = db.delModule(req.params.id)
                         .then(async (data) => {
                             if (!data) {
                                 return res.status(500).json({
@@ -173,13 +171,13 @@ router.delete('/delete/:id',
         }
     })
 
-// SEARCH /api/module/search/:name
+// SEARCH /module/search/:name
 router.get('/search/:name',
     auth,
     async (req, res) => {
         try {
             const db = dbService.getDbServiceInstance();
-            const result = db.getSubjectByName(req.params.name);
+            const result = db.getModuleByName(req.params.name);
             result
                 .then(async (data) => {
                     if (!data) {
@@ -205,7 +203,7 @@ router.get('/search/:name',
         }
     })
 
-// READ /api/module/
+// READ /module/
 router.get('*',
     auth,
     async (req, res) => {

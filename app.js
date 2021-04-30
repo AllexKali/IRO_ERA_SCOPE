@@ -10,11 +10,12 @@ app.use(express.json({
     extended: true
 }));
 
+app.use('/auth', require('./routes/auth.routes'))
+app.use('/account', require('./routes/account.routes'));
+app.use('/accountdata', require('./routes/accountData.routes'));
+app.use('/subject', require('./routes/subject.routes'));
+app.use('/module', require('./routes/module.routes'));
 
-app.use('/api/auth', require('./routes/auth.routes'))
-app.use('/api/account', require('./routes/account.routes'));
-app.use('/api/accountdata', require('./routes/accountData.routes'));
-app.use('/api/subject', require('./routes/subject.routes'));
 
 async function start() {
     try {

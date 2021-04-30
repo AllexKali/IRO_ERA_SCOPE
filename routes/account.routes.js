@@ -24,7 +24,7 @@ function toRuleList(data) {
 
 // _________CreateAccount__________
 
-// CREATE /api/account/create
+// CREATE /account/create
 router.post('/create',
     [
         check('login', 'Введите логин').exists(),
@@ -106,7 +106,7 @@ router.post('/create',
 
 // _________editAccount__________
 
-// UPDATE /api/account/update
+// UPDATE /account/update
 router.patch('/update',
     auth,
     async (req, res) => {
@@ -167,7 +167,7 @@ router.patch('/update',
         }
     })
 
-// DELETE /api/account/delete/:login
+// DELETE /account/delete/:login
 router.delete('/delete/:login',
     auth,
     async (req, res) => {
@@ -216,7 +216,7 @@ router.delete('/delete/:login',
 
 // _________readAccount__________
 
-// SEARCH /api/account/search/:login
+// SEARCH /account/search/:login
 router.get('/:login',
     auth,
     async (req, res) => {
@@ -257,7 +257,7 @@ router.get('/:login',
     })
 
 
-// READ /api/account/
+// READ /account/
 router.get('*',
     auth,
     async (req, res) => {

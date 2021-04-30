@@ -18,7 +18,7 @@ function toRuleList(data) {
 }
 
 
-// ADD /api/accountdata/add
+// ADD /accountdata/add
 router.post('/add',
     auth,
     async (req, res) => {
@@ -113,7 +113,7 @@ router.post('/add',
 
 // _________editAccount__________
 
-// UPDATE /api/accountdata/update
+// UPDATE /accountdata/update
 router.patch('/update',
     auth,
     async (req, res) => {
@@ -216,7 +216,7 @@ router.patch('/update',
 // _________readAccount__________
 
 
-// READ /api/accountdata/view
+// READ /accountdata/view
 router.get('/view',
     auth,
     async (req, res) => {
@@ -261,7 +261,7 @@ router.get('/view',
         }
     })
 
-// read /api/accountdata/
+// read /accountdata/
 router.get('*',
     auth,
     async (req, res) => {
