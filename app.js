@@ -16,6 +16,8 @@ app.use('/accountdata', require('./routes/accountData.routes'));
 app.use('/subject', require('./routes/subject.routes'));
 app.use('/module', require('./routes/module.routes'));
 app.use('/lesson', require('./routes/lesson.routes'));
+app.use('/lesson/tasks', require('./routes/pupilLesson.routes'));
+
 
 async function start() {
     try {
