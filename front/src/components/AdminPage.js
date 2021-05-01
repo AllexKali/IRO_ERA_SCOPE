@@ -29,6 +29,9 @@ function AdminPage() {
     const [userRole, setUserRole] = React.useState('');
     const [userPassword, setUserPassword] = React.useState('');
     const [userLogin, setUserLogin] = React.useState('');
+    const [userCourse, setUserCourse] = React.useState('');
+    const [userModule, setUserModule] = React.useState('');
+    const [userGroup, setUserGroup] = React.useState('');
     const [newUserRole, setNewUserRole] = React.useState('');
     const [newUserPassword, setNewUserPassword] = React.useState('');
     const [newUserLogin, setNewUserLogin] = React.useState('');
@@ -44,18 +47,23 @@ function AdminPage() {
     const handleCloseCreate = () => {
         setOpenCreateDialog(false);
     }
-
+    //Необходимо сделать добавление по названию курса/модуля/группы
+    //Сейчас добавлят только по номеру
     const handleConfirm = () => {
         users[idUser - 1].role = userRole;
         users[idUser - 1].login = userLogin;
         users[idUser - 1].password = userPassword;
-        console.log(users);
+        if( users[idUser - 1].role === 'student') {
+            users[idUser - 1].course = userCourse;
+            users[idUser - 1].module = userModule;
+            users[idUser - 1].group = userGroup;
+        }
         setOpen(false);
     }
 
     const handleConfirmNewUser = () => {
+        
         users.push(({id: users.length + 1, login: newUserLogin, password: newUserPassword, role: newUserRole}));
-        console.log(users);
         setOpenCreateDialog(false);
     }
 
@@ -68,8 +76,27 @@ function AdminPage() {
         setUserRole(users[idUser - 1].role);
         setUserPassword(users[idUser - 1].password);
         setUserLogin(users[idUser - 1].login);
+
+        if(users[idUser - 1].role === 'student'){
+            setUserCourse(users[idUser - 1].course);
+            setUserModule(users[idUser - 1].module);
+            setUserGroup(users[idUser - 1].group);
+        };
+
         setOpen(true);
        
+    };
+
+    const handleCourseChange = e => {
+        setUserCourse(e.target.value);
+    };
+
+    const handleModuleChange = e => {
+        setUserModule(e.target.value);
+    };
+
+    const handleGroupChange = e => {
+        setUserGroup(e.target.value);
     };
 
     const handleRoleChange = e => {
@@ -161,6 +188,37 @@ function AdminPage() {
                         type="role"
                         fullWidth
                     />
+                    {(userRole === 'student')
+                    ? <>
+                    <TextField 
+                        value = {userCourse}
+                        onChange = {handleCourseChange}
+                        margin="dense"
+                        id="course"
+                        label="Курс"
+                        type="course"
+                        fullWidth
+                    />
+                    <TextField 
+                        value = {userModule}
+                        onChange = {handleModuleChange}
+                        margin="dense"
+                        id="module"
+                        label="Модуль"
+                        type="module"
+                        fullWidth
+                    />
+                    <TextField 
+                        value = {userGroup}
+                        onChange = {handleGroupChange}
+                        margin="dense"
+                        id="group"
+                        label="Группа"
+                        type="group"
+                        fullWidth
+                    />
+                    </>:
+                    <></>}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">Отмена</Button>

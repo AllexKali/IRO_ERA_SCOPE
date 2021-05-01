@@ -222,7 +222,7 @@ function addZero(mounthNumber) {
 	}
 }
 
-function GridGroup() {
+function GridGroup(props) {
 
     const [open, setOpen] = React.useState(false);
     const [lessonValue, setLessonValue] = useState('');
@@ -244,11 +244,14 @@ function GridGroup() {
     const handleEnter = (e) => {
          
         try { 
-            console.log(dataBase[0].modules[0].groups[0].lessons[cardNumber - 1].day);
-        dataBase[0].modules[0].groups[0].lessons[cardNumber - 1].day.push(({id: dataBase[0].modules[0].groups[0].lessons[0].day.length + 1, title: lessonValue, time: time}));
-        
+            dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[cardNumber - 1].day.push(({id: dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[cardNumber - 1].day.length + 1, title: lessonValue, time: time}));
         } catch {
-            console.log("пусто"); //надо сделать добавление элемента
+            console.log(cardNumber);
+            while(dataBase[props.course].modules[props.module].groups[props.group - 1].lessons.length < cardNumber){
+                dataBase[props.course].modules[props.module].groups[props.group - 1].lessons.push(({day: []}));    
+            }
+            
+            dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[cardNumber - 1].day.push(({id: dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[cardNumber - 1].day.length + 1, title: lessonValue, time: time}));
         }
         lessons[cardNumber - 1].day.push(({id: lessons.length + 1, title: lessonValue, time: time}));
         setOpen(false);
@@ -261,12 +264,12 @@ function GridGroup() {
     const handleTimeChange = e => {
         setTime(e.target.value);
     };
+    console.log(props.role + ' роль');
 
   return (
     <Container >
     <Grid container spacing={4} variant="outlined" >
         {cards.map((card) =>(
-            console.log(dataBase[0].modules[0].groups[0].lessons.length),
            l = 0,
             <Grid item key={card} xs={12} sm={6} md={3} id = {card}>
                 <CardContent >
@@ -281,11 +284,11 @@ function GridGroup() {
                          
                         return <Lessons key={lessons[card - 1].day[l - 1].id} lesson = {lessons[card - 1].day[l - 1].title } time={lessons[card - 1].day[l - 1].time} index={index} />
                         }) } */}
-                        {((card - 1) < dataBase[0].modules[0].groups[0].lessons.length)
-                        ?   dataBase[0].modules[0].groups[0].lessons[card - 1].day.map((lesson, index) => {
+                        {((card - 1) < dataBase[props.course].modules[props.module].groups[props.group - 1].lessons.length)
+                        ?   dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[card - 1].day.map((lesson, index) => {
                             l = l + 1;
 
-                            return <Lessons key={dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].id} lesson = {dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].title } time={dataBase[0].modules[0].groups[0].lessons[card - 1].day[l - 1].time} index={index} />
+                            return <Lessons key={dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[card - 1].day[l - 1].id} lesson = {dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[card - 1].day[l - 1].title } time={dataBase[props.course].modules[props.module].groups[props.group - 1].lessons[card - 1].day[l - 1].time} index={index} />
                         }):
                         <></>
                         } 
@@ -300,14 +303,21 @@ function GridGroup() {
                  
                     </List>
                 </CardContent>
+                {(props.role === 'student')
+                ?<CardActions id = {'действие' + card} >
+                    
+                </CardActions>:
+
                 <CardActions id = {'действие' + card} >
-                    <Button id = {'кнопка' + card}  size="small" color="primary" onClick={handleClickOpen}>
-                        Добавить
-                    </Button>
-                    {/* <Button size="small" color="primary">
-                        Текст 2
-                    </Button> */}
+                <Button id = {'кнопка' + card}  size="small" color="primary" onClick={handleClickOpen}>
+                    Добавить
+                </Button>
+                {/* <Button size="small" color="primary">
+                    Текст 2
+                </Button> */}
                 </CardActions>
+                }
+                
             </Grid>
         ))}
     </Grid>

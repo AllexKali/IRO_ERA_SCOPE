@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ThemeContext from "../Context";
+// import userData from "../App";
+import GridGroup from './GridGroups';
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -11,12 +13,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ListGroup(props) {
-  let { setstatus} = useContext(ThemeContext)
+  let { setstatus} = useContext(ThemeContext);
+  let {setCourse} = useContext(ThemeContext)
+  let {setModule} = useContext(ThemeContext)
+  let {setGroup} = useContext(ThemeContext)
 
   const classes = useStyles();
 
+  function gruops(){
+    
+    setCourse(props.course);
+    setModule(props.module);
+    setGroup(props.id);
+    setstatus(true);
+    
+  }
+
   return (
-        <ListItem button className={classes.nested} onClick={status => setstatus(status)}>
+        <ListItem button className={classes.nested} onClick={gruops}>
             <ListItemText primary={props.group} />
         </ListItem>
   );

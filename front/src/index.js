@@ -7,9 +7,13 @@ import ThemeContext from './Context'
 
 function Main() {
   const [status, setstatus] = useState('false')
+  const [course, setCourse] = useState(0)
+  const [module, setModule] = useState(0)
+  const [group, setGroup] = useState(0)
   return (
     <React.StrictMode>
-      <ThemeContext.Provider value={{status, setstatus}}>
+      <ThemeContext.Provider value={{status, setstatus , course, setCourse, module, setModule, group, setGroup}}>
+        
         <App />
       </ThemeContext.Provider>
     </React.StrictMode>  

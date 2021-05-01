@@ -28,8 +28,6 @@ const Groups = [
 ]
 
 function ListModules(props) {
-  console.log(props.course + ' ListModules');
-  console.log(props.id + ' ListModules  ID');
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const [groupValue, setGroupValue] = React.useState('');
@@ -56,7 +54,6 @@ function ListModules(props) {
 
   const handleEnter = (event) => {
     dataBase[props.course].modules[props.id - 1].groups.push(({groupTitle: groupValue, lessons: []}));
-    console.log(dataBase[0]);
     Groups.push(({id: Groups.length + 1, title: groupValue}));
     setOpenDialog(false);
   };
@@ -95,7 +92,7 @@ function ListModules(props) {
             <List component="div" disablePadding>
                 { dataBase[props.course].modules[props.id - 1].groups.map(group => {
                  
-                  return <ListGroups group={group.groupTitle} key={group.id} lessons={[]}/>
+                  return <ListGroups group={group.groupTitle} key={group.id} lessons={[]} course={props.course} module={props.id - 1} id={group.id}/>
                 
                 }) }
             </List>

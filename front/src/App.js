@@ -29,10 +29,21 @@ const useStyles = makeStyles((theme) => ({
 //   {id: 3, title: 'Курс 3'}
 // ]
 
+// const userData = React.createContext({
+//   course: '',
+//   module: '',
+//   group: ''
+// })
+
 
 
 const AccountRole = ({ role }) => {
+  
+  const {course} = useContext(ThemeContext)
+  const {module} = useContext(ThemeContext)
+  const {group} = useContext(ThemeContext)
   const {status} = useContext(ThemeContext)
+
   const classes = useStyles();
 
   function userSearch(login){
@@ -49,7 +60,7 @@ try {
       
       {(status === 'false')
       ?(<ListSubject className={classes.main} />) :
-      <GridGroup/>
+      <GridGroup course={course} module={module} group={group}/>
       }
       
       </Container>
@@ -60,8 +71,11 @@ try {
     return (
       <>
       <AppBarTop role={role}/>
-      <Container className={classes.main}>  
-      <GridGroup/>
+      <Container className={classes.main}>
+      {(users.find(userSearch).course === undefined || users.find(userSearch).module  === undefined || users.find(userSearch).group  === undefined)
+      ? <Welcome message={'Ожидате пока администратор назначит вам группу'}/> :
+      <GridGroup course={users.find(userSearch).course} module={users.find(userSearch).module} group={users.find(userSearch).group} role={role}/>}   
+      
       </Container>
       </>
     );
@@ -98,6 +112,7 @@ try {
 
 const App = () => {
   const [role1, setRole1] = useState('teacher')
+  
   return(
     <>
     <AccountRole role={role1}/>

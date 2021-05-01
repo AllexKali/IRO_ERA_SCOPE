@@ -8,14 +8,17 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function Welcome() {
+function Welcome(props) {
 
     const classes = useStyles();
 
     return (
         <>
             <Container className={classes.main}>
-                <h3>Войдите в аккаунт чтобы продолжить</h3>        
+                {(props.message !== '')
+                ?<h3>{props.message}</h3>:
+                <h3>Войдите в аккаунт чтобы продолжить</h3>
+                }   
             </Container > 
         </>
     );

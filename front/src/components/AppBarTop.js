@@ -30,14 +30,13 @@ function AppBarTop(props) {
         return login.login === props.role;  
     }
 
-    let {status, setstatus} = useContext(ThemeContext)
+    let {status, setstatus} = useContext(ThemeContext);
 
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-        
         setOpen(true);
     }
 
@@ -54,7 +53,7 @@ function AppBarTop(props) {
             document.getElementById('login').value = 'успешно';
             props.handleCloseEnter('');
         }
-        console.log(users);
+        
     }
 
     try {
