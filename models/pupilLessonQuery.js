@@ -11,8 +11,18 @@ class DbService {
             const res = await new Promise((res, rej) => {
                 db.query(`SELECT * FROM pupilLesson;`, (err, results) => {
                     if (err) rej(new Error(err.message));
-                    res({
+                    obj['pupilLesson'] = {
                         ...results
+                    }
+                })
+
+                db.query(`SELECT * FROM pupil;`, (err, results) => {
+                    if (err) rej(new Error(err.message));
+                    obj['pupil'] = {
+                        ...results
+                    };
+                    res({
+                        ...obj
                     })
                 })
             });
@@ -82,6 +92,24 @@ class DbService {
             const res = await new Promise((res, rej) => {
                 const query = `UPDATE pupilLesson SET ${whichData} = ? WHERE idPupilLesson = ?;`;
                 db.query(query, [newData, id], (err, results) => {
+                    if (err) rej(new Error(err.message));
+                    res({
+                        ...results
+                    })
+                })
+            });
+            return res;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // создать аккуантs по названию
+    async createTaskToPeople(data) {
+        try {
+            const res = await new Promise((res, rej) => {
+                const query = `INSERT INTO pupillesson_for_pupil (idPupilLesson, idPupil) VALUES ${data};`;
+                db.query(query,  (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
                         ...results
