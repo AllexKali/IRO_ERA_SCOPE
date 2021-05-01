@@ -90,8 +90,13 @@ function AppBarTop(props) {
                             <TextField 
                                 autoFocus
                                 margin="dense"
+<<<<<<< HEAD
                                 id="login"
                                 label="Логин"
+=======
+                                id="name"
+                                label="Login"
+>>>>>>> origin/backEnd_branch
                                 type="login"
                                 fullWidth
                             />
