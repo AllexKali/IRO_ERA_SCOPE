@@ -6,29 +6,48 @@ class DbService {
         return instance ? instance : new DbService();
     }
     // получить все аккуанты
-    async getAll() {
-        try {
-            const res = await new Promise((res, rej) => {
-                db.query(`SELECT * FROM pupilLesson;`, (err, results) => {
-                    if (err) rej(new Error(err.message));
-                    obj['pupilLesson'] = {
-                        ...results
-                    }
-                })
+    async getAll(data) {
 
-                db.query(`SELECT * FROM pupil;`, (err, results) => {
-                    if (err) rej(new Error(err.message));
-                    obj['pupil'] = {
-                        ...results
-                    };
-                    res({
-                        ...obj
+        if (!data) {
+            try {
+                const res = await new Promise((res, rej) => {
+                    db.query(`SELECT * FROM pupilLesson;`, (err, results) => {
+                        if (err) rej(new Error(err.message));
+                        obj['pupilLesson'] = {
+                            ...results
+                        }
                     })
-                })
-            });
-            return res;
-        } catch (error) {
-            console.log(error);
+
+                    db.query(`SELECT * FROM pupil;`, (err, results) => {
+                        if (err) rej(new Error(err.message));
+                        obj['pupil'] = {
+                            ...results
+                        };
+                        res({
+                            ...obj
+                        })
+                    })
+                });
+                return res;
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            try {
+                const res = await new Promise((res, rej) => {
+                    db.query(`select * from schedule.pupillesson where schedule.pupillesson.idPupilLesson in 
+                    (select idPupilLesson from schedule.pupillesson_for_pupil  where schedule.pupillesson_for_pupil.idPupil in (
+                    select idPupil from schedule.pupil  where idAccount=?))`, [data], (err, results) => {
+                        if (err) rej(new Error(err.message));
+                        res({
+                            ...obj
+                        })
+                    })
+                });
+                return res;
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
@@ -51,11 +70,11 @@ class DbService {
     }
 
     // создать аккуантs по названию
-    async createTask(idLesson, startDate, endDate, status) {
+    async createTask(idLesson, startDate, endDate) {
         try {
             const res = await new Promise((res, rej) => {
-                const query = "INSERT INTO pupilLesson (idLesson, startDate, endDate, status) VALUES (?,?,?,?);";
-                db.query(query, [idLesson, startDate, endDate, status], (err, results) => {
+                const query = "INSERT INTO pupilLesson (idLesson, startDate, endDate) VALUES (?,?,?);";
+                db.query(query, [idLesson, startDate, endDate], (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
                         ...results
@@ -109,7 +128,7 @@ class DbService {
         try {
             const res = await new Promise((res, rej) => {
                 const query = `INSERT INTO pupillesson_for_pupil (idPupilLesson, idPupil) VALUES ${data};`;
-                db.query(query,  (err, results) => {
+                db.query(query, (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
                         ...results

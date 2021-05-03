@@ -36,8 +36,7 @@ router.post('/create',
                     const {
                         idLesson,
                         startDate = null,
-                        endDate = null,
-                        status = 0
+                        endDate = null
                     } = req.body;
 
                     if (!idLesson) {
@@ -181,43 +180,45 @@ router.post('/send',
         try {
             const rulesResult = dbAuth.getAuthRules(req.user.userId);
             rulesResult
-            .then(async (data) => {
-                const ruleList = toRuleList(data);
-                if (!ruleList.includes('editLessons')) {
-                    res.status(400).json({
-                        message: "Нет доступа"
-                    });
-                }
-
-                const{value}=req.body;
-
-                if (!data || typeof(value)!=='string') {
-                    return res.status(400).json({
-                        message: 'Ошибка клиента. Заполните данные корректно!'
-                    })
-                }
-
-            const db = dbService.getDbServiceInstance();
-            const result = db.createTaskToPeople(value)
-            result
                 .then(async (data) => {
-                    if (!data) {
-                        return res.status(500).json({
-                            message: "Ошибка сервера. Обратитесь за помощью"
+                    const ruleList = toRuleList(data);
+                    if (!ruleList.includes('editLessons')) {
+                        res.status(400).json({
+                            message: "Нет доступа"
+                        });
+                    }
+
+                    const {
+                        value
+                    } = req.body;
+
+                    if (!data || typeof (value) !== 'string') {
+                        return res.status(400).json({
+                            message: 'Ошибка клиента. Заполните данные корректно!'
                         })
                     }
-                    return res.status(201).json({
-                        message: "Урок успешно создан"
-                    })                    
 
+                    const db = dbService.getDbServiceInstance();
+                    const result = db.createTaskToPeople(value)
+                    result
+                        .then(async (data) => {
+                            if (!data) {
+                                return res.status(500).json({
+                                    message: "Ошибка сервера. Обратитесь за помощью"
+                                })
+                            }
+                            return res.status(201).json({
+                                message: "Урок успешно создан"
+                            })
+
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
                 })
                 .catch(err => {
                     console.log(err);
                 });
-            })
-            .catch(err => {
-                console.log(err);
-            });
 
         } catch (e) {
             console.log(e.message);
@@ -286,22 +287,43 @@ router.get('*',
                         res.status(400).json({
                             message: "Нет доступа"
                         });
+                    } else {
+                        const db = dbService.getDbServiceInstance();
+                        const result = db.getAll();
+                        result
+                            .then(async (data) => {
+                                if (!data) {
+                                    return res.status(500).json({
+                                        message: "Ошибка сервера. Обратитесь за помощью"
+                                    })
+                                }
+                                res.json(data);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
                     }
 
-                    const db = dbService.getDbServiceInstance();
-                    const result = db.getAll();
-                    result
-                        .then(async (data) => {
-                            if (!data) {
-                                return res.status(500).json({
-                                    message: "Ошибка сервера. Обратитесь за помощью"
-                                })
-                            }
-                            res.json(data);
-                        })
-                        .catch(err => {
-                            console.log(err);
+                    if (!ruleList.includes('readLessons')) {
+                        res.status(400).json({
+                            message: "Нет доступа"
                         });
+                    } else {
+                        const db = dbService.getDbServiceInstance();
+                        const result = db.getAll(req.user.userId);
+                        result
+                            .then(async (data) => {
+                                if (!data) {
+                                    return res.status(500).json({
+                                        message: "Ошибка сервера. Обратитесь за помощью"
+                                    })
+                                }
+                                res.json(data);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    }
                 })
                 .catch(err => {
                     console.log(err);
