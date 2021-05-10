@@ -37,11 +37,11 @@ const useStyles = makeStyles((theme) => ({
 
     const { request} = useHttp();
         const [form, setForm] = useState({
-            login: '',  password: ''  
+            login: '',  password: '', code: ''  
         })
     
         const changeHandler = event => {
-            setForm({login: document.getElementById('login').value, password: document.getElementById('password').value});
+            setForm({login: document.getElementById('login').value, password: document.getElementById('password').value, code: document.getElementById('code').value});
         }
     
         const handleCloseEnter2 = async () => {
