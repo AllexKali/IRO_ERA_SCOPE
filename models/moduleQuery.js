@@ -9,7 +9,10 @@ class DbService {
     async getAll() {
         try {
             const res = await new Promise((res, rej) => {
-                db.query(`SELECT * FROM module;`, (err, results) => {
+                db.query(`select  m.idModule, m.name as module_name, s.name as subject, 
+                g.name as grade_name, g.gradeNumber from schedule.module m
+                LEFT JOIN schedule.subject s ON s.idSubject LIKE m.idSubject
+                LEFT JOIN schedule.grade g ON g.idGrade LIKE s.idGrade;`, (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
                         ...results
@@ -22,11 +25,14 @@ class DbService {
         }
     }
 
-    // получить аккуантs по названию
+    // получить модуль по названию
     async getModuleByName(name) {
         try {
             const res = await new Promise((res, rej) => {
-                const query = "SELECT * FROM module WHERE name=?;";
+                const query = `select  m.idModule, m.name as module_name, s.name as subject, 
+                g.name as grade_name, g.gradeNumber from schedule.module m
+                LEFT JOIN schedule.subject s ON s.idSubject LIKE m.idSubject
+                LEFT JOIN schedule.grade g ON g.idGrade LIKE s.idGrade WHERE m.name=?;`;
                 db.query(query, [name], (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
@@ -41,7 +47,7 @@ class DbService {
     }
 
 
-    // создать аккуантs по названию
+    // создать модуль по названию
     async createModule(idSubject, name) {
         try {
             const res = await new Promise((res, rej) => {
@@ -59,7 +65,7 @@ class DbService {
         }
     }
 
-    // удалить аккуантs по id
+    // удалить модуль по id
     async delModule(id) {
         try {
             const res = await new Promise((res, rej) => {
@@ -77,7 +83,7 @@ class DbService {
         }
     }
 
-    // обновить аккуантs по id
+    // обновить модуль по id
     async updateModule(whichData, newData, id) {
         try {
             const res = await new Promise((res, rej) => {

@@ -2,6 +2,7 @@
 const express = require('express')
 const dotenv = require('dotenv');
 const app = express()
+const cors = require('cors')
 //=================ИМПОРТ=================
 
 dotenv.config();
@@ -10,6 +11,8 @@ app.use(express.json({
     extended: true
 }));
 
+app.use(cors())
+
 app.use('/auth', require('./routes/auth.routes'))
 app.use('/account', require('./routes/account.routes'));
 app.use('/accountdata', require('./routes/accountData.routes'));
@@ -17,7 +20,7 @@ app.use('/subject', require('./routes/subject.routes'));
 app.use('/module', require('./routes/module.routes'));
 app.use('/lesson', require('./routes/lesson.routes'));
 app.use('/lesson/tasks', require('./routes/pupilLesson.routes'));
-
+app.get('*', (req, res) => res.send('Hello World!'))
 
 async function start() {
     try {

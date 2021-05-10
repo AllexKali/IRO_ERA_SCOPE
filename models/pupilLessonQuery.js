@@ -5,7 +5,7 @@ class DbService {
     static getDbServiceInstance() {
         return instance ? instance : new DbService();
     }
-    // получить все аккуанты
+    // получить все задания
     async getAll(data) {
 
         if (!data) {
@@ -51,7 +51,7 @@ class DbService {
         }
     }
 
-    // получить аккуантs по названию
+    // получить задания по названию
     async getTaskByName(idLesson) {
         try {
             const res = await new Promise((res, rej) => {
@@ -69,7 +69,7 @@ class DbService {
         }
     }
 
-    // создать аккуантs по названию
+    // создать задания по названию
     async createTask(idLesson, startDate, endDate) {
         try {
             const res = await new Promise((res, rej) => {
@@ -87,7 +87,7 @@ class DbService {
         }
     }
 
-    // удалить аккуантs по id
+    // удалить задания по id
     async delTask(id) {
         try {
             const res = await new Promise((res, rej) => {
@@ -105,7 +105,7 @@ class DbService {
         }
     }
 
-    // обновить аккуантs по id
+    // обновить задания по id
     async updateTask(whichData, newData, id) {
         try {
             const res = await new Promise((res, rej) => {
@@ -123,7 +123,7 @@ class DbService {
         }
     }
 
-    // создать аккуантs по названию
+    // создать задания по названию
     async createTaskToPeople(data) {
         try {
             const res = await new Promise((res, rej) => {

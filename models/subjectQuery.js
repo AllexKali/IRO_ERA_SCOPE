@@ -9,7 +9,9 @@ class DbService {
     async getAll() {
         try {
             const res = await new Promise((res, rej) => {
-                db.query(`SELECT * FROM subject;`, (err, results) => {
+                db.query(`select s.idSubject, s.name as subject, 
+                g.name as grade_name, g.gradeNumber from schedule.subject s
+                LEFT JOIN schedule.grade g ON g.idGrade LIKE s.idGrade`, (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({
                         ...results
@@ -26,7 +28,10 @@ class DbService {
     async getSubjectByName(name) {
         try {
             const res = await new Promise((res, rej) => {
-                const query = "SELECT * FROM subject WHERE name=?;";
+                const query = `select s.idSubject, s.name as subject, g.name as grade_name, 
+                g.gradeNumber from schedule.subject s
+                LEFT JOIN schedule.grade g ON g.idGrade LIKE s.idGrade 
+                WHERE name=?;`;
                 db.query(query, [name], (err, results) => {
                     if (err) rej(new Error(err.message));
                     res({

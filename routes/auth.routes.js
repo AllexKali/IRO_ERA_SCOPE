@@ -92,6 +92,7 @@ router.post('/login',
     ],
     async (req, res) => {
         try {
+            // console.log(req.body);
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({
@@ -138,7 +139,8 @@ router.post('/login',
 
                     res.json({
                         token,
-                        userId: data[0].idAccount
+                        userId: data[0].idAccount,
+                        userRole: data[0].idRole
                     })
 
                 })
