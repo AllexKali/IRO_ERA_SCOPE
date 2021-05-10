@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
         }
     
         const handleCloseEnter1 = () => {
-            // handleCloseEnter2(); //передает данные на сервер
+            handleCloseEnter2(); //передает данные на сервер
             findUser = false;
             for (let i = 0; i < users.length; i++){
                 if(users[i].login.includes(document.getElementById('login').value) === true){
