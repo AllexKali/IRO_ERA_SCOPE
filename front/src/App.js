@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const AccountRole = ({ role }) => {
+const AccountRole = ({ role, serverRole }) => {
   
   const {course} = useContext(ThemeContext)
   const {module} = useContext(ThemeContext)
@@ -47,14 +47,16 @@ const AccountRole = ({ role }) => {
   const classes = useStyles();
 
   function userSearch(login){
+    console.log(login.login === role);
     return login.login === role;
   }
 try {
-  if (users.find(userSearch).role === 'teacher') { 
+  if (serverRole === 1) { 
     
     return (
       <>
-      <AppBarTop  role={role}/>
+      {/* {console.log('Teacher')} */}
+      <AppBarTop  role={role} serverRole={serverRole}/>
       
       <Container className={classes.main}> {/*Нужен для центровки содержимого*/}
       
@@ -66,11 +68,12 @@ try {
       </Container>
       </>
     );
-  } else  if (users.find(userSearch).role === 'student'){
+  } else  if (serverRole === 2){
     
     return (
       <>
-      <AppBarTop role={role}/>
+      {/* {console.log('pupil')} */}
+      <AppBarTop role={role} serverRole={serverRole}/>
       <Container className={classes.main}>
       {(users.find(userSearch).course === undefined || users.find(userSearch).module  === undefined || users.find(userSearch).group  === undefined)
       ? <Welcome message={'Ожидате пока администратор назначит вам группу'}/> :
@@ -79,10 +82,11 @@ try {
       </Container>
       </>
     );
-  } else if (users.find(userSearch).role === 'admin') {
+  } else if (serverRole === 3) {
     return (
       <>
-      <AppBarTop role={role}/>
+      {/* {console.log('admin')} */}
+      <AppBarTop role={role} serverRole={serverRole}/>
       <Container className={classes.main}> 
       
       <AdminPage />
@@ -94,6 +98,7 @@ try {
     
     return (
       <>
+      {/* {console.log('first else')} */}
       <AppBarTop />
       <Welcome />
       </>
@@ -103,6 +108,7 @@ try {
   
   return (
     <>
+    {/* {console.log('second else')} */}
     <AppBarTop />
     <Welcome />
     </>
@@ -111,12 +117,13 @@ try {
 }
 
 const App = () => {
-  const [role1, setRole1] = useState('teacher')
+  const [role1, setRole1] = useState('');
+  const [serverRole1, setServerRole1] = useState('');
   
   return(
     <>
-    <AccountRole role={role1}/>
-    <AppBarTop role = {role1} handleCloseEnter={role1 => setRole1(role1)}/>
+    <AccountRole role={role1} serverRole={serverRole1}/>
+    <AppBarTop   role = {role1} serverRole={serverRole1} handleCloseEnter4={role1 => setRole1(role1)} handleCloseEnter5={serverRole1 => setServerRole1(serverRole1)}/>
     </>
   )
 }

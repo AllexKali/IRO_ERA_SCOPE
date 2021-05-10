@@ -15,10 +15,10 @@ function Welcome(props) {
     return (
         <>
             <Container className={classes.main}>
-                {(props.message !== '')
+                {(props.message !== undefined)
                 ?<h3>{props.message}</h3>:
                 <h3>Войдите в аккаунт чтобы продолжить</h3>
-                }   
+                }
             </Container > 
         </>
     );

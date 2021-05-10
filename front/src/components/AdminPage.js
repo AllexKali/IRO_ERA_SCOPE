@@ -139,7 +139,7 @@ function AdminPage() {
             if(user.id % 2 === 0)
             {
              return (
-                <ListItem button onClick={editUser} className={classes.item} id={user.id}>
+                <ListItem button onClick={editUser} className={classes.item} id={user.id} key={user.id}>
                     <ListItemText primary={'Логин: ' + user.login} />
                     <ListItemText primary={'Пароль: ' + user.password} />
                     <ListItemText primary={'Роль: ' + user.role} />
@@ -147,7 +147,7 @@ function AdminPage() {
             );
             } else {
             return (
-                <ListItem button onClick={editUser} id={user.id}>
+                <ListItem button onClick={editUser} id={user.id} key={user.id}>
                     <ListItemText primary={'Логин: ' + user.login} />
                     <ListItemText primary={'Пароль: ' + user.password} />
                     <ListItemText primary={'Роль: ' + user.role} />
