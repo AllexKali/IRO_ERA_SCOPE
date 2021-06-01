@@ -10,6 +10,7 @@ import ListModules from './ListModules';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import dataBase from "../DB";
+import users from "../users";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
   nested: {
     paddingLeft: theme.spacing(4),
+  },
+  addModule: {
+    paddingLeft: theme.spacing(4),
+    backgroundColor: "#e0e0e0"
   }
 }));
 
@@ -40,13 +45,15 @@ function ListSubjectItem(props)  {
   const [openList, setOpenList] = React.useState(false);
   const [moduleValue, setModuleValue] = React.useState('');
 
+  function userSearch(login){
+    return login.login === props.role;
+  }
+
   const handleClick = () => {
     setOpen(!open);
   };
 
   const handleClose = () => {
-    // alert(DB[0][0][0][0][0]);
-    // console.log(DB[0][0][0][0][0]);
     setOpenList(false);
   };
 
@@ -62,30 +69,11 @@ function ListSubjectItem(props)  {
 
   return (
     <>
-      {/* {console.log(dataBase[0].course[0].module[0].groups[0].day[0].id)}     */}
-      {/* <ListItem button onClick={handleClick}>
-        <ListItemText primary={props.course} />
-        {!open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={!open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-        { Modules.map(module => {
-          if (module.id === 0) {
-            return(
-            <ListItem button onClick={openDialog}>
-              <ListItemText primary={'Добавить модуль'} />
-            </ListItem>
-            )
-          } else {
-            return <ListModules module={module.title} key={module.id}/>
-          }
-      }) }
-        </List> */}
-        {(props.id % 2 === 0)
-        ?<> <ListItem button onClick={handleClick} className={classes.item}>
-        <ListItemText primary={props.course} />
-        {!open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
+      {(props.id % 2 === 0)
+      ?<> <ListItem button onClick={handleClick} className={classes.item}>
+      <ListItemText primary={props.course} />
+      {!open ? <ExpandLess /> : <ExpandMore />}
+    </ListItem>
       </>:
       <>
       <ListItem button onClick={handleClick} >
@@ -96,12 +84,18 @@ function ListSubjectItem(props)  {
       }
       <Collapse in={!open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-        <ListItem button onClick={openDialog} className={classes.nested}>
-          <ListItemText primary={'Добавить модуль'} />
-        </ListItem>
+        {(users.find(userSearch).role === 'admin')
+      ?
+      <ListItem button onClick={openDialog} className={classes.addModule} >
+        <ListItemText primary={'Добавить модуль'} />
+      </ListItem>:
+      <></>
+      }
+        
+
         { dataBase[props.id - 1].modules.map(module => {
           
-          return <ListModules module={module.moduleTitle} key={module.id} groups={[]} course={props.id - 1} id={module.id}/>
+          return <ListModules module={module.moduleTitle} key={module.id} groups={[]} course={props.id - 1} id={module.id} role={props.role}/>
           
       }) }
         </List>

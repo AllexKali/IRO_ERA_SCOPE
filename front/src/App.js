@@ -9,8 +9,6 @@ import ThemeContext from "./Context";
 import users from "./users";
 import AdminPage from './components/AdminPage';
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -22,27 +20,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// const Subjects = [
-//   {id: 0, title: 'Добавить'},
-//   {id: 1, title: 'Курс 1'},
-//   {id: 2, title: 'Курс 2'},
-//   {id: 3, title: 'Курс 3'}
-// ]
-
-// const userData = React.createContext({
-//   course: '',
-//   module: '',
-//   group: ''
-// })
-
-
-
 const AccountRole = ({ role, serverRole }) => {
   
   const {course} = useContext(ThemeContext)
   const {module} = useContext(ThemeContext)
   const {group} = useContext(ThemeContext)
   const {status} = useContext(ThemeContext)
+  const {findUser} = useContext(ThemeContext)
+  
 
   const classes = useStyles();
 
@@ -51,28 +36,26 @@ const AccountRole = ({ role, serverRole }) => {
     return login.login === role;
   }
 try {
-  if (serverRole === 1) { 
+  if (serverRole === 1 || users.find(userSearch).role === 'teacher') { 
     
     return (
       <>
-      {/* {console.log('Teacher')} */}
       <AppBarTop  role={role} serverRole={serverRole}/>
       
-      <Container className={classes.main}> {/*Нужен для центровки содержимого*/}
+      <Container className={classes.main}>
       
       {(status === 'false')
-      ?(<ListSubject className={classes.main} />) :
-      <GridGroup course={course} module={module} group={group}/>
+      ?(<ListSubject className={classes.main} role={role}/>) :
+      <GridGroup course={course} module={module} group={group} mounth={0} role={role}/>
       }
       
       </Container>
       </>
     );
-  } else  if (serverRole === 2){
+  } else  if (serverRole === 2 || users.find(userSearch).role === 'student'){
     
     return (
       <>
-      {/* {console.log('pupil')} */}
       <AppBarTop role={role} serverRole={serverRole}/>
       <Container className={classes.main}>
       {(users.find(userSearch).course === undefined || users.find(userSearch).module  === undefined || users.find(userSearch).group  === undefined)
@@ -82,14 +65,17 @@ try {
       </Container>
       </>
     );
-  } else if (serverRole === 3) {
+  } else if (serverRole === 3 || users.find(userSearch).role === 'admin') {
     return (
       <>
-      {/* {console.log('admin')} */}
       <AppBarTop role={role} serverRole={serverRole}/>
       <Container className={classes.main}> 
-      
-      <AdminPage />
+      {(findUser === false)
+      ?(<AdminPage />):
+      <>{(status === 'false')
+      ?(<ListSubject className={classes.main} role={role}/>) :
+      <GridGroup course={course} module={module} group={group} role={role}/>
+      }</>}
       
       </Container>
       </>
@@ -98,7 +84,6 @@ try {
     
     return (
       <>
-      {/* {console.log('first else')} */}
       <AppBarTop />
       <Welcome />
       </>
@@ -108,7 +93,6 @@ try {
   
   return (
     <>
-    {/* {console.log('second else')} */}
     <AppBarTop />
     <Welcome />
     </>
@@ -122,8 +106,8 @@ const App = () => {
   
   return(
     <>
-    <AccountRole role={role1} serverRole={serverRole1}/>
-    <AppBarTop   role = {role1} serverRole={serverRole1} handleCloseEnter4={role1 => setRole1(role1)} handleCloseEnter5={serverRole1 => setServerRole1(serverRole1)}/>
+    <AccountRole role={role1} serverRole={serverRole1} />
+    <AppBarTop   role = {role1} serverRole={serverRole1}  handleCloseEnter4={role1 => setRole1(role1)} handleCloseEnter5={serverRole1 => setServerRole1(serverRole1)}/>
     </>
   )
 }

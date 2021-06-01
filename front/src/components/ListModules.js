@@ -10,6 +10,7 @@ import ListGroups from './ListGroups';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import dataBase from "../DB";
+import users from "../users";
 
 const useStyles = makeStyles((theme) => ({
   nested: {
@@ -17,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
   item: {
       backgroundColor: "#e0e0e0"
+  },
+  addLesson: {
+    paddingLeft: theme.spacing(4),
+    backgroundColor: "#E1F1FF"
   }
 }));
 
@@ -31,13 +36,8 @@ function ListModules(props) {
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const [groupValue, setGroupValue] = React.useState('');
-
-  
-
   const classes = useStyles();
-
   const classes1 = classes.nested + ' ' + classes.item;
-
   const [openInner, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -50,6 +50,10 @@ function ListModules(props) {
 
   function openDialogWindow () {
     setOpenDialog(true);
+  }
+
+  function userSearch(login){
+    return login.login === props.role;
   }
 
   const handleEnter = (event) => {
@@ -73,26 +77,18 @@ function ListModules(props) {
     </>
       }
         <Collapse in={!openInner} timeout="auto" unmountOnExit>
-            {/* <List component="div" disablePadding>
-                { Groups.map(group => {
-                if (group.id === 0) {
-                  return(
-                  <ListItem button onClick={openDialogWindow}>
-                    <ListItemText primary={'Создать группу'} />
-                  </ListItem>
-                  )
-                } else {
-                  return <ListGroups group={group.title} key={group.id}/>
-                }
-                }) }
-            </List> */}
-            <ListItem button onClick={openDialogWindow}>
-                    <ListItemText primary={'Создать группу'} className={classes.nested}/>
-                  </ListItem>
+            
+            {(users.find(userSearch).role === 'admin')
+            ?
+            <ListItem button onClick={openDialogWindow} className={classes.item}>
+              <ListItemText primary={'Создать группу'} className={classes.nested}/>
+            </ListItem>:
+            <></>
+            }
             <List component="div" disablePadding>
                 { dataBase[props.course].modules[props.id - 1].groups.map(group => {
                  
-                  return <ListGroups group={group.groupTitle} key={group.id} lessons={[]} course={props.course} module={props.id - 1} id={group.id}/>
+                  return <ListGroups group={group.groupTitle} key={group.id} lessons={[]} course={props.course} module={props.id - 1} id={group.id} />
                 
                 }) }
             </List>

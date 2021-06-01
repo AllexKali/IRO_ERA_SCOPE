@@ -3,38 +3,45 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import users from "../users";
-import { makeStyles, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions} from '@material-ui/core';
+import { makeStyles, Dialog, DialogTitle, DialogContent, TextField, DialogActions} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     main: {
       width: '100%',
       backgroundColor: theme.palette.background.paper,
-      marginTop: theme.spacing(9)
+      marginTop: theme.spacing(1)
+
     },
     item: {
         backgroundColor: "#e0e0e0"
+    },
+    list: {
+        left: '80%', 
+        maxWidth: 400,
     }
 
   }));
 
   let idUser = 1;
-  let userLogin = '';
 
 function AdminPage() {
-    
 
-    const [open, setOpen] = React.useState(false);
-    const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
-    const [userRole, setUserRole] = React.useState('');
-    const [userPassword, setUserPassword] = React.useState('');
-    const [userLogin, setUserLogin] = React.useState('');
-    const [userCourse, setUserCourse] = React.useState('');
-    const [userModule, setUserModule] = React.useState('');
-    const [userGroup, setUserGroup] = React.useState('');
-    const [newUserRole, setNewUserRole] = React.useState('');
-    const [newUserPassword, setNewUserPassword] = React.useState('');
-    const [newUserLogin, setNewUserLogin] = React.useState('');
+    let newUser = users;
+    
+    const [open, setOpen] = useState(false);
+    const [openCreateDialog, setOpenCreateDialog] = useState(false);
+    const [userRole, setUserRole] = useState('');
+    const [userPassword, setUserPassword] = useState('');
+    const [userLogin, setUserLogin] = useState('');
+    const [userCourse, setUserCourse] = useState('');
+    const [userModule, setUserModule] = useState('');
+    const [userGroup, setUserGroup] = useState('');
+    const [newUserRole, setNewUserRole] = useState('');
+    const [newUserPassword, setNewUserPassword] = useState('');
+    const [newUserLogin, setNewUserLogin] = useState('');
+    const [searchUser, setSearchUser] = useState('');
 
     const handleClose = () => {
         setOpen(false);
@@ -47,8 +54,7 @@ function AdminPage() {
     const handleCloseCreate = () => {
         setOpenCreateDialog(false);
     }
-    //Необходимо сделать добавление по названию курса/модуля/группы
-    //Сейчас добавлят только по номеру
+
     const handleConfirm = () => {
         users[idUser - 1].role = userRole;
         users[idUser - 1].login = userLogin;
@@ -85,6 +91,22 @@ function AdminPage() {
 
         setOpen(true);
        
+    };
+
+    function filterItems(word) {
+        console.log(searchUser + " 123");
+
+        try {
+        
+        return newUser.filter(function(el) {
+            return el.login.toLowerCase().indexOf(searchUser.toLowerCase()) > -1;
+            
+            
+        })
+        } catch {
+            return newUser;
+        }
+
     };
 
     const handleCourseChange = e => {
@@ -124,9 +146,16 @@ function AdminPage() {
     };
 
     const classes = useStyles();
-
+    
     return(
         <>
+        <Typography >Поиск:&nbsp; 
+        <TextField id='searchField' onChange={() => filterItems(setSearchUser(document.getElementById('searchField').value))}></TextField>
+        
+        
+        </Typography>
+        
+        
         <List
             component="nav"
             aria-labelledby="nested-list-subheader"
@@ -135,7 +164,8 @@ function AdminPage() {
         <ListItem button onClick={handleEnterUser} className={classes.item}>
             <ListItemText primary={'Добавить пользователя'} />
         </ListItem>
-        { users.map((user) => {
+        
+        { filterItems(searchUser).map((user) => {
             if(user.id % 2 === 0)
             {
              return (
@@ -155,7 +185,8 @@ function AdminPage() {
             );
             }
             
-        }) }
+        }) 
+        }
         </List>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Редактировать пользователя: {userLogin}</DialogTitle>

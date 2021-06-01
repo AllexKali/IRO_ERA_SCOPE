@@ -1,11 +1,10 @@
 import React, {useContext, useState} from 'react';
 import { Container, AppBar, Toolbar, IconButton, Box, makeStyles, Dialog, DialogTitle,
-     DialogContent, DialogContentText, TextField, DialogActions, Typography } from '@material-ui/core';
+    DialogContent, DialogContentText, TextField, DialogActions, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import ThemeContext from "../Context";
 import users from "../users";
-import { useHttp } from '../Hooks/http.hook';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -26,59 +25,35 @@ const useStyles = makeStyles((theme) => ({
   }));
 
   function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
+    return <MuiAlert elevation={15} variant="filled" {...props} />;
   }
 
-  let findUser = false;
-
   function AppBarTop(props) {
-      console.log(props.role);
-    const auth = useContext(ThemeContext);
 
-    const { request} = useHttp();
         const [form, setForm] = useState({
-            login: '',  password: '', code: ''  
+            login: '',  password: ''  
         })
     
         const changeHandler = event => {
-            setForm({login: document.getElementById('login').value, password: document.getElementById('password').value, code: document.getElementById('code').value});
-        }
-    
-        const handleCloseEnter2 = async () => {
-            try {
-                const data = await request('http://5.167.37.81:3307/auth/signup', 'POST', {...form});
-            } catch (e) {
-    
-            }    
+            setForm({login: document.getElementById('login').value, password: document.getElementById('password').value});
         }
 
         const handleCloseEnter3 = async () => {
-            try {
-                const data = await request('http://5.167.37.81:3307/auth/login', 'POST', {...form});
-                auth.login(data.token, data.userId);
-                props.handleCloseEnter5(data.userRole);
-                props.handleCloseEnter4(document.getElementById('login').value);
-            } catch (e) {
-    
-            }    
+            props.handleCloseEnter4(document.getElementById('login').value);
         }
-
-        // function updateLogin() {
-        //     console.log(auth.login + " 1");
-        //     auth.login(document.getElementById('login').value);
-        //     console.log(auth.login);
-        // }
     
         function userSearch1(login){
             return login.login === props.role;  
         }
     
         let {status, setstatus} = useContext(ThemeContext);
+        let {findUser, setFindUser} = useContext(ThemeContext);
     
         const classes = useStyles();
     
         const [open, setOpen] = React.useState(false);
         const [openSnackbar, setOpenSnackbar] = React.useState(false);
+        const [openSnackbarAlert, setOpenSnackbarAlert] = React.useState(false);
     
         const handleClickOpen = () => {
             setOpen(true);
@@ -90,10 +65,10 @@ const useStyles = makeStyles((theme) => ({
     
         const handleCloseSnackbar = () => {
             setOpenSnackbar(false);
+            setOpenSnackbarAlert(false);
         }
     
         const handleCloseEnter1 = () => {
-            handleCloseEnter2(); //передает данные на сервер
             findUser = false;
             for (let i = 0; i < users.length; i++){
                 if(users[i].login.includes(document.getElementById('login').value) === true){
@@ -102,11 +77,10 @@ const useStyles = makeStyles((theme) => ({
                 }
             }
             if (findUser) {
-                document.getElementById('login').value = 'пользователь с таким именем уже существует';    
+                document.getElementById('login').value = '';
+                setOpenSnackbarAlert(true);    
             } else {
                 users.push(({id: users.length + 1, login: document.getElementById('login').value, password: document.getElementById('password').value, role: 'student'}));
-                document.getElementById('login').value = 'успешно';
-                document.getElementById('password').value = '';
                 setOpenSnackbar(true);
                 props.handleCloseEnter4('');
             }
@@ -125,14 +99,24 @@ const useStyles = makeStyles((theme) => ({
                         <MenuIcon />
                     </IconButton>
                     
-                    {(props.serverRole === 1 || props.serverRole === 2 || props.serverRole === 3)
+                    {(props.serverRole === 1 || props.serverRole === 2 || props.serverRole === 3 || users.find(userSearch1).role === 'teacher' || users.find(userSearch1).role === 'admin' || users.find(userSearch1).role === 'student')
                     ?   (<Typography className={classes.Button}>{props.role}</Typography>) :
                     <></>
                     }
                     <Box >
-                    {(props.serverRole === 1 || props.serverRole === 2 || props.serverRole === 3)
-        
-                        ? (<><Button variant="contained" color="secondary" onClick={() => {props.handleCloseEnter4(''); props.handleCloseEnter5();}}className={classes.Button}>Выйти</Button>
+                    {(props.serverRole === 1 || props.serverRole === 2 || props.serverRole === 3 || users.find(userSearch1).role === 'teacher' || users.find(userSearch1).role === 'admin' || users.find(userSearch1).role === 'student')
+
+                        ? (<>
+                        {(users.find(userSearch1).role === 'student')
+                        ?(setstatus('false')):
+                        <></>}
+                        
+                        {(users.find(userSearch1).role === 'admin')
+                        ?(<><Button variant="contained" color="default" onClick={findUser => setFindUser(true)} className={classes.Button}>Курсы</Button>
+                        <Button variant="contained" color="default" onClick={findUser => setFindUser(false)} className={classes.Button}>Пользователи</Button>
+                        </>):<></>
+                        }
+                        <Button variant="contained" color="secondary" onClick={() => {props.handleCloseEnter4(''); props.handleCloseEnter5();}}className={classes.Button}>Выйти</Button>
                         {(status !== 'false')
                            ? <Button  variant="contained" onClick={status => setstatus('false')}>Назад</Button>
                         :
@@ -177,6 +161,16 @@ const useStyles = makeStyles((theme) => ({
                                 <Button onClick={() => {handleCloseEnter3(); }} color="primary">Войти</Button>
                                 <Button onClick={handleCloseEnter1} color="primary">Регистрация</Button>
                             </DialogActions>
+                            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                                <Alert onClose={handleCloseSnackbar} severity="success">
+                                    Регистрация прошла успешно!
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar open={openSnackbarAlert} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                                    <Alert onClose={handleCloseSnackbar} severity="error">
+                                        Пользователь с таким именем уже существует!
+                                    </Alert>
+                                </Snackbar>
                         </Dialog>
                         </>
                     }
@@ -184,11 +178,7 @@ const useStyles = makeStyles((theme) => ({
                     </Box>
                 </Toolbar>
             </Container>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-                    <Alert onClose={handleCloseSnackbar} severity="success">
-                        This is a success message!
-                    </Alert>
-                </Snackbar>
+            
         </AppBar>
         );
         } catch {
@@ -237,15 +227,21 @@ const useStyles = makeStyles((theme) => ({
                                     <Button onClick={() => {handleCloseEnter3();}} color="primary">Войти</Button>
                                     <Button onClick={handleCloseEnter1} color="primary">Регистрация</Button>
                                 </DialogActions>
+                                <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                                    <Alert onClose={handleCloseSnackbar} severity="success">
+                                        Регистрация прошла успешно!
+                                    </Alert>
+                                </Snackbar>
+                                <Snackbar open={openSnackbarAlert} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                                    <Alert onClose={handleCloseSnackbar} severity="error">
+                                        Пользователь с таким именем уже существует!
+                                    </Alert>
+                                </Snackbar>
                             </Dialog>          
                         </Box>
                     </Toolbar>
                 </Container>
-                <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-                    <Alert onClose={handleCloseSnackbar} severity="success">
-                        Регистрация прошла успешно!
-                    </Alert>
-                </Snackbar>
+                
             </AppBar>
             );    
         }

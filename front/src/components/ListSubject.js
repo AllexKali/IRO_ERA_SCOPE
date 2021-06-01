@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import dataBase from "../DB";
-
+import users from "../users";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -27,11 +27,15 @@ const Subjects = [
     {id: 3, title: 'Курс 3'}
   ]
 
-function ListSubject() {
+function ListSubject(props) {
   const [open, setOpen] = React.useState(false);
   const [subjectValue, setSubjectValue] = useState('');
   
   const classes = useStyles();
+
+  function userSearch(login){
+    return login.login === props.role;
+  }
 
   function openDialog () {
     setOpen(true);
@@ -47,10 +51,6 @@ function ListSubject() {
     setOpen(false);  
   };
 
-  // const handleLessonChange = e => {
-  //   setSubjectValue(e.target.value);
-  // };
-
   return (
     <>
     <List
@@ -58,24 +58,17 @@ function ListSubject() {
       aria-labelledby="nested-list-subheader"
       className={classes.main}
     >
-      {/* { Subjects.map(subject => {
-        if (subject.id === 0) {
-          return(
-          <ListItem button onClick={openDialog}>
-            <ListItemText primary={'Добавить курс'} />
-          </ListItem>
-          )
-        } else {
-          return <ListSubjectItem id = {subject.id} subject={subject.title} key={subject.id}/>
-        }
-      }) } */}
-      
+      {(users.find(userSearch).role === 'admin')
+      ?
       <ListItem button onClick={openDialog}  className={classes.item}>
           <ListItemText primary={'Добавить курс'} />
-      </ListItem>
+      </ListItem>:
+      <></>
+      }
+      
       { dataBase.map(dataBas => {
         
-          return <ListSubjectItem id = {dataBas.id} course={dataBas.course} key={dataBas.id} modules={[]} />
+          return <ListSubjectItem id = {dataBas.id} course={dataBas.course} key={dataBas.id} modules={[]} role={props.role}/>
         
       }) }
     </List>

@@ -12,14 +12,17 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function Lessons({index, lesson, time}) {
+  
+
+function Lessons({index, lesson, time, teacher, role}) {
 
     const classes = useStyles();
-
+    
     return (
-
+        
         <ListItem className={classes.nested}>
-            <ListItemText primary={index + 1  + ". " + lesson + " " + time} />        
+            <ListItemText primary={index + 1  + ". " + lesson + " " + time + " " + teacher} />
+                
         </ListItem>
 
     );

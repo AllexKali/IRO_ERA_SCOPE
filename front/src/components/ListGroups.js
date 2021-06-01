@@ -3,12 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ThemeContext from "../Context";
-// import userData from "../App";
-import GridGroup from './GridGroups';
 
 const useStyles = makeStyles((theme) => ({
   nested: {
-    paddingLeft: theme.spacing(4),
+    paddingLeft: theme.spacing(6),
   },
 }));
 
